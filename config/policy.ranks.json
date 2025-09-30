@@ -61,6 +61,18 @@
       "level": "MR"
     },
     {
+      "name": "Captain I",
+      "minPoints": 3000,
+      "minTimeDays": 14,
+      "level": "D&I"
+    },
+    {
+      "name": "Captain II",
+      "minPoints": 3200,
+      "minTimeDays": 16,
+      "level": "D&I"
+    },
+    {
       "name": "Tempest Major",
       "minPoints": 3500,
       "minTimeDays": 21,
@@ -71,6 +83,12 @@
       "minPoints": 5000,
       "minTimeDays": 30,
       "level": "CMD"
+    },
+    {
+      "name": "Brigadier General",
+      "minPoints": 7000,
+      "minTimeDays": 45,
+      "level": "CCM"
     },
     {
       "name": "Stormmarshal",

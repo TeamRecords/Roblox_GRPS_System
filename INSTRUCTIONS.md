@@ -1,14 +1,16 @@
-# INSTRUCTIONS — Exact Build Plan for Codex (v2)
+# Integration Notes — Roblox ↔ Web
 
-Additions to prior instructions:
-- Implement `/warn` command in `src/roblox/server/commands.lua` so it:
-  - Verifies actor permissions (`permissions.canWarn`),
-  - Calls `punishments.incrementWarn`,
-  - If threshold hit, enqueues `punishment.applyTrialSuspension` or `punishment.applySevereBan`,
-  - Sends notice to actor and target (chat/private) and writes audit entry.
+## Public API endpoints (to implement in GRPS)
+- `GET /leaderboard/top?limit=25` — returns global top players by points.
+- `GET /leaderboard/records` — returns top 3–5 KOs and WOs all-time.
+- `GET /player/:userId` — returns leaderstats for a specific user.
 
-- Create `src/roblox/server/punishments.lua` (outlined in AGENTS.md).
-- Ensure `Guest` role id is present in `config/permissions.json` with `ignored: true` and code checks that early to bypass points & promotions.
+These should read from OrderedDataStore snapshots created by a scheduled job inside the Roblox game server (or your out-of-experience bot).
 
-Testing:
-- Add tests in `src/roblox/server/tests/test_punishments.lua` that simulate repeated warnings and verify suspension and ban logic, including suspended_until calculation and promotion locks.
+## Security
+- Endpoints are read-only for the website; no write routes.
+- Rate-limit by IP and add cache headers (`s-maxage`) for CDN caching.
+- Never expose internal audit data via public API.
+
+## Deployment
+- Point `rle.arcfoundation.net` to your host (e.g., Vercel) and set `NEXT_PUBLIC_GRPS_API` env var.

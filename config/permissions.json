@@ -8,16 +8,61 @@
       "level": "LR",
       "canEarn": true
     },
+    "Suspended": {
+      "level": "L&M",
+      "canEarn": false
+    },
     "Shock Trooper I": {
-      "level": "LR",
-      "canWarn": false
+      "level": "LR"
+    },
+    "Shock Trooper II": {
+      "level": "LR"
+    },
+    "Volt Specialist I": {
+      "level": "LR"
+    },
+    "Volt Specialist II": {
+      "level": "MR",
+      "canWarn": true
+    },
+    "Storm Corporal I": {
+      "level": "MR",
+      "canWarn": true
+    },
+    "Storm Corporal II": {
+      "level": "MR",
+      "canWarn": true
     },
     "Thunder Sergeant I": {
       "level": "MR",
       "canWarn": true
     },
+    "Thunder Sergeant II": {
+      "level": "MR",
+      "canWarn": true
+    },
     "Arc Lieutenant I": {
       "level": "MR",
+      "canWarn": true
+    },
+    "Arc Lieutenant II": {
+      "level": "MR",
+      "canWarn": true
+    },
+    "Captain I": {
+      "level": "D&I",
+      "canWarn": true
+    },
+    "Captain II": {
+      "level": "D&I",
+      "canWarn": true
+    },
+    "Ambassador": {
+      "level": "CMD",
+      "canWarn": true
+    },
+    "Envoy": {
+      "level": "CMD",
       "canWarn": true
     },
     "Tempest Major": {
@@ -27,6 +72,11 @@
     },
     "Electro Colonel": {
       "level": "CMD",
+      "canWarn": true,
+      "canBan": true
+    },
+    "Brigadier General": {
+      "level": "CCM",
       "canWarn": true,
       "canBan": true
     },
