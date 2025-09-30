@@ -1,12 +1,9 @@
-# Robloxian Lightning Empire — GRPS System (v3)
+# Robloxian Lightning Empire — GRPS System (v6)
 
-**Version:** 1.2 • **Date:** 2025-09-30
-
-This package includes:
-- Roblox server/shared skeletons (LuaU) with punishment flow.
-- Test stubs.
-- Text-only **rank chart SVG** (docs/rank_chart.svg).
-- **Web Project** scaffold at `/web-project` (Next.js 15 + TailwindCSS) for public leaderboard at https://rle.arcfoundation.net.
-- A separate **PDF rank chart** is also generated for your reference (not stored in repo).
-
-See `INSTRUCTIONS.md` for build steps and integration notes.
+Unified, Codex-ready package containing:
+- INFO.md (master spec)
+- STRUCTURE.md, AGENTS.md, INSTRUCTIONS.md
+- /config policy JSONs
+- /src Roblox LuaU modules + tests
+- /docs rank_chart.svg
+- /web-project (Next.js 15 + Tailwind + TS + ESLint + Prisma (Neon) + Turnstile) ready for Vercel

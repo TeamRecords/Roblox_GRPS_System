@@ -1,25 +1,2 @@
--- src/roblox/server/permissions.lua
-local Permissions = {}
-
--- In a full build, map real Group ranks to these flags.
-local config = {
-	canWarnLevels = { CMD=true, CCM=true, LDR=true, MR=true },
-	canBanLevels  = { CMD=true, CCM=true, LDR=true },
-}
-
--- Stub: determine actor's level from their rank (replace with real mapping)
-local function levelOf(actor)
-	return actor:GetAttribute("RLE_LEVEL") or "LR"
-end
-
-function Permissions.canWarn(actor)
-	local lvl = levelOf(actor)
-	return config.canWarnLevels[lvl] == true
-end
-
-function Permissions.canBan(actor)
-	local lvl = levelOf(actor)
-	return config.canBanLevels[lvl] == true
-end
-
-return Permissions
+local P={}
+local function levelOf(actor) return actor and actor:GetAttribute('RLE_LEVEL') or 'LR' end function P.canWarn(actor) local l=levelOf(actor) return (l=='MR'or l=='D&I'or l=='CMD'or l=='CCM'or l=='LDR') end function P.canBan(actor) local l=levelOf(actor) return (l=='CMD'or l=='CCM'or l=='LDR') end return P

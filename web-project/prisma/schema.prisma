@@ -1,0 +1,4 @@
+generator client{provider='prisma-client-js'}
+datasource db{provider='postgresql';url=env('DATABASE_URL')}
+model Player{ id Int @id @default(autoincrement()) userId Int @unique username String rank String points Int @default(0) kos Int @default(0) wos Int @default(0) updatedAt DateTime @updatedAt createdAt DateTime @default(now()) @@index([points,kos,wos]) }
+model Snapshot{ id Int @id @default(autoincrement()) takenAt DateTime @default(now()) payload Json }

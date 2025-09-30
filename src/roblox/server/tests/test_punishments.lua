@@ -1,19 +1,3 @@
--- src/roblox/server/tests/test_punishments.lua
-local Punishments = require(script.Parent.Parent.punishments)
-local Policy = require(script.Parent.Parent.Parent.shared.policy)
-
-return function(t)
-	local policy = Policy.load()
-	Punishments.init(policy)
-	
-	-- Simulate warnings
-	local uid = 12345
-	local aid = 999
-	
-	-- reset is omitted; assume fresh user.
-	for i=1,4 do
-		Punishments.incrementWarn(uid, aid, "test")
-	end
-	local st = Punishments.evaluate(uid, aid)
-	t:eq(st, "TRIAL", "Warn>=4 triggers trial")
-end
+local P=require(script.Parent.Parent.punishments)
+local Policy=require(script.Parent.Parent.Parent.shared.policy)
+return function(t) local pol=Policy.load(); P.init(pol); local uid=123; for i=1,4 do P.incrementWarn(uid,0,'x') end t:eq(P.evaluate(uid,0),'TRIAL','trial') end

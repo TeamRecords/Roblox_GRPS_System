@@ -1,0 +1,1 @@
+export async function GET(){const r=await fetch(process.env.NEXT_PUBLIC_GRPS_API + '/leaderboard/records',{cache:'no-store'});const data=await r.json().catch(()=>({kos:[],wos:[]}));return new Response(JSON.stringify(data),{headers:{'content-type':'application/json'}})}

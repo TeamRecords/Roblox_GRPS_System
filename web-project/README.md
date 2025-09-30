@@ -1,32 +1,14 @@
-# RLE Web Project (Next.js 15 + TailwindCSS)
+# RLE Web Project (Vercel / Next.js 15 / Tailwind / TS / Prisma / Turnstile)
 
-Domain: https://rle.arcfoundation.net
-
-## Quick Start
-```bash
+Quick start:
+```
 cd web-project
 npm i
 cp .env.example .env.local
+npx prisma generate && npx prisma db push
 npm run dev
 ```
-Set `NEXT_PUBLIC_GRPS_API` to your GRPS API base (e.g., Cloudflare Workers, Vercel, or your own).
 
-## Pages
-- `/` — Global leaderboard, top KOs/WOs, player cards.
-The page uses server actions to fetch JSON from GRPS endpoints:
-- `GET /leaderboard/top` → `{ players: [{userId, username, rank, points, kos, wos}] }`
-- `GET /leaderboard/records` → `{ kos: [...], wos: [...] }`
-
-## Notes
-- No binary assets; Tailwind only.
-- Add custom components in `/components`.
-
-
-## Mock API (for local dev)
-This scaffold includes mock JSON routes under `app/api` so the UI renders without a backend.
-
-- `GET /api/leaderboard/top`
-- `GET /api/leaderboard/records`
-- `GET /api/player/[userId]`
-
-To switch the UI from mock routes to your real GRPS API, set `NEXT_PUBLIC_GRPS_API` and update fetch calls in `app/page.tsx`.
+Local dev uses built-in mock API routes under `/api/*`. In prod, set `NEXT_PUBLIC_GRPS_API` to your read-only GRPS endpoint.
+Turnstile: client retrieves token; server verifies via `POST /api/turnstile`.
+Roblox Open Cloud: use for authenticated tasks; publish read-only snapshots for the site to consume via HTTP.

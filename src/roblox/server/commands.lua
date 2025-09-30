@@ -1,37 +1,6 @@
--- src/roblox/server/commands.lua
--- Slash-style commands; wire to TextChatService or custom UI.
-local Commands = {}
-local Permissions = require(script.Parent.permissions)
-local Punishments = require(script.Parent.punishments)
-local Policy = require(script.Parent.Parent.shared.policy)
-
+local C={}
+local Perm=require(script.Parent.permissions)
+local Pun=require(script.Parent.punishments)
+local Policy=require(script.Parent.Parent.shared.policy)
 local policy
-
-function Commands.init()
-	policy = Policy.load()
-	Punishments.init(policy)
-end
-
-local function respond(player, msg)
-	-- Replace with proper UI hook
-	print(("[CMD RESP:%s] %s"):format(player and player.Name or "server", msg))
-end
-
-function Commands.warn(actor, targetUserId, reason)
-	if not Permissions.canWarn(actor) then
-		return respond(actor, "You do not have permission to warn.")
-	end
-	local count = Punishments.incrementWarn(targetUserId, actor.UserId, reason or "unspecified")
-	local state = Punishments.evaluate(targetUserId, actor.UserId)
-	if state == "TRIAL" then
-		Punishments.applyTrialSuspension(targetUserId, actor.UserId, count)
-		respond(actor, ("User %d moved to Suspended (Punishment_Trial). Count=%d"):format(targetUserId, count))
-	elseif state == "SEVERE" then
-		Punishments.applySevereBan(targetUserId, actor.UserId, count)
-		respond(actor, ("User %d banned (Punishment_Severe). Count=%d"):format(targetUserId, count))
-	else
-		respond(actor, ("Warn added. Count=%d"):format(count))
-	end
-end
-
-return Commands
+function C.init() policy=Policy.load() Pun.init(policy) end local function say(p,msg) print('[CMD]', p and p.Name or 'server', msg) end function C.warn(actor,targetUserId,reason) if not Perm.canWarn(actor) then return say(actor,'No permission') end local count=Pun.incrementWarn(targetUserId,actor and actor.UserId or 0,reason or 'unspecified') local s=Pun.evaluate(targetUserId,actor and actor.UserId or 0) if s=='TRIAL' then Pun.applyTrialSuspension(targetUserId,actor and actor.UserId or 0,count) say(actor,('User %d Suspended (Trial). Count=%d'):format(targetUserId,count)) elseif s=='SEVERE' then Pun.applySevereBan(targetUserId,actor and actor.UserId or 0,count) say(actor,('User %d Banned (Severe). Count=%d'):format(targetUserId,count)) else say(actor,('Warn added. Count=%d'):format(count)) end end return C
