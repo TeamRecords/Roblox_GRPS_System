@@ -20,3 +20,13 @@ The page uses server actions to fetch JSON from GRPS endpoints:
 ## Notes
 - No binary assets; Tailwind only.
 - Add custom components in `/components`.
+
+
+## Mock API (for local dev)
+This scaffold includes mock JSON routes under `app/api` so the UI renders without a backend.
+
+- `GET /api/leaderboard/top`
+- `GET /api/leaderboard/records`
+- `GET /api/player/[userId]`
+
+To switch the UI from mock routes to your real GRPS API, set `NEXT_PUBLIC_GRPS_API` and update fetch calls in `app/page.tsx`.
