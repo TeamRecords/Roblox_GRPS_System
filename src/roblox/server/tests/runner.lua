@@ -16,21 +16,20 @@ local function register(name, factory)
   registry[name] = factory
 end
 
-register('points', require(script.Parent.test_points))
-register('ranks', require(script.Parent.test_ranks))
-register('policy', require(script.Parent.test_policy))
+register('permissions', require(script.Parent.test_permissions))
+register('punishments', require(script.Parent.test_punishments))
 
 local Runner = {}
 
 function Runner.run()
-  print('[TEST] start shared suite')
+  print('[TEST] start server suite')
   for name, factory in pairs(registry) do
     if type(factory) == 'function' then
       factory({ eq = eq, truthy = truthy })
       print('[PASS]', name)
     end
   end
-  print('[TEST] end shared suite')
+  print('[TEST] end server suite')
 end
 
 return Runner
