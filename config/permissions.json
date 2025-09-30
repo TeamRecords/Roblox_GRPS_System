@@ -1,0 +1,44 @@
+{
+  "roles": {
+    "Guest": {
+      "level": "N/A",
+      "ignored": true
+    },
+    "Initiate": {
+      "level": "LR",
+      "canEarn": true
+    },
+    "Shock Trooper I": {
+      "level": "LR",
+      "canWarn": false
+    },
+    "Thunder Sergeant I": {
+      "level": "MR",
+      "canWarn": true
+    },
+    "Arc Lieutenant I": {
+      "level": "MR",
+      "canWarn": true
+    },
+    "Tempest Major": {
+      "level": "CMD",
+      "canWarn": true,
+      "canBan": false
+    },
+    "Electro Colonel": {
+      "level": "CMD",
+      "canWarn": true,
+      "canBan": true
+    },
+    "Stormmarshal": {
+      "level": "CCM",
+      "canWarn": true,
+      "canBan": true
+    },
+    "Imperator": {
+      "level": "LDR",
+      "canWarn": true,
+      "canBan": true
+    }
+  }
+}

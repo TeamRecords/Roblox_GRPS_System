@@ -1,0 +1,82 @@
+{
+  "ranks": [
+    {
+      "name": "Shock Trooper I",
+      "minPoints": 0,
+      "minTimeDays": 0,
+      "level": "LR"
+    },
+    {
+      "name": "Shock Trooper II",
+      "minPoints": 50,
+      "minTimeDays": 2,
+      "level": "LR"
+    },
+    {
+      "name": "Volt Specialist I",
+      "minPoints": 150,
+      "minTimeDays": 3,
+      "level": "LR"
+    },
+    {
+      "name": "Volt Specialist II",
+      "minPoints": 400,
+      "minTimeDays": 5,
+      "level": "MR"
+    },
+    {
+      "name": "Storm Corporal I",
+      "minPoints": 700,
+      "minTimeDays": 7,
+      "level": "MR"
+    },
+    {
+      "name": "Storm Corporal II",
+      "minPoints": 1000,
+      "minTimeDays": 10,
+      "level": "MR"
+    },
+    {
+      "name": "Thunder Sergeant I",
+      "minPoints": 1400,
+      "minTimeDays": 12,
+      "level": "MR"
+    },
+    {
+      "name": "Thunder Sergeant II",
+      "minPoints": 1800,
+      "minTimeDays": 14,
+      "level": "MR"
+    },
+    {
+      "name": "Arc Lieutenant I",
+      "minPoints": 2200,
+      "minTimeDays": 16,
+      "level": "MR"
+    },
+    {
+      "name": "Arc Lieutenant II",
+      "minPoints": 2700,
+      "minTimeDays": 20,
+      "level": "MR"
+    },
+    {
+      "name": "Tempest Major",
+      "minPoints": 3500,
+      "minTimeDays": 21,
+      "level": "CMD"
+    },
+    {
+      "name": "Electro Colonel",
+      "minPoints": 5000,
+      "minTimeDays": 30,
+      "level": "CMD"
+    },
+    {
+      "name": "Stormmarshal",
+      "minPoints": 8000,
+      "minTimeDays": 60,
+      "level": "CCM"
+    }
+  ]
+}

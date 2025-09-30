@@ -1,0 +1,8 @@
+{
+  "punishments": {
+    "trial_threshold": 4,
+    "severe_threshold": 7,
+    "trial_days": 14,
+    "trial_lock_promotion": true
+  }
+}

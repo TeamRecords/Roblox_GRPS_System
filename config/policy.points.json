@@ -1,0 +1,19 @@
+{
+  "weights": {
+    "activity_tick_5min": 1,
+    "training_complete": 15,
+    "operation_complete": 25,
+    "ko": 0.25,
+    "wo": -0.1,
+    "recommendation_cmd": 10,
+    "recommendation_ccm": 20
+  },
+  "caps": {
+    "daily": 500,
+    "weekly": 2500
+  },
+  "anti_abuse": {
+    "ko_cooldown_seconds": 30,
+    "activity_min_seconds": 300
+  }
+}

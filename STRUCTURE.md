@@ -1,130 +1,60 @@
-# STRUCTURE — Architecture, Ranks, Points, and Rules
+# STRUCTURE — Architecture, Ranks, Points, and Rules (v2)
 
-## 1) System Overview
-GRPS has four cooperating modules:
-1. **Core Service** — Roblox scripts + DataStore abstraction for rank points, activity, and policy rules.
-2. **NEXUS UI** — In‑experience UI for members and a privileged panel for Command.
-3. **Ops CLI** — Admin console commands (prefixed `/`) for audit‑logged operations.
-4. **AutoPromote Bot** — Out‑of‑experience service account that reads policy, evaluates members, and executes promotions/demotions via Roblox APIs.
+## Key behavioral notes (new)
+- **Guest**: role is strictly for non-members and must be **ignored** by GRPS modules (no points, no promotions, no penalties).
+- **Warning & Punishment Policy**:
+  - Warnings are tracked as `warn_count` per user in audit logs and datastore.
+  - If `warn_count > 3` (i.e. 4 or more), system automatically moves the user to **Suspended** role and labels action as `Punishment_Trial`. Duration: up to **14 days** (configurable via `policy.punishments.trial_days`).
+  - If `warn_count > 6` (i.e. 7 or more), system escalates to **ban** (remove from group or set `banned=true`) and labels action as `Punishment_Severe` (permanent unless reviewed).
+  - All such actions are **audit‑logged** with actor (Cmd/CCM), reason, count snapshot, and timestamps. Automatic moves by AutoPromote Bot must include the trigger and last warning events.
+- **Temporary Suspensions**: Suspended members retain profile data but cannot earn points, cannot use commands requiring LR or above, and cannot access NEXUS features (CommandPanel and Leaderboards).
 
-### Data & Storage
-- Primary: Roblox **DataStore** (OrderedDataStore for leaderboards).
-- Secondary: External API (REST/GraphQL) proxy with signed webhooks (optional).
-- Audit: Append‑only logs per action with actor, target, reason, and hash chain.
+## Rank Ladder (snapshot)
+- Imperator [LDR]
+- Supreme Council [LDR]
+- Supreme Command [LDR]
+- Supreme Admirals [LDR]
 
-## 2) Rank Ladder (RLE)
-**Unchanged Leadership & Command**  
-- Imperator [LDR]  
-- Supreme Council [LDR]  
-- Supreme Command [LDR]  
-- Supreme Admirals [LDR]  
+- Stormmarshal [CCM]
+- Brigadier General [CCM]
+- Electro Colonel [CMD]
+- Tempest Major [CMD]
 
-**Central Command**  
-- General [CCM]  
-- Brigadier General [CCM]  
+- Ambassador [CMD]
+- Envoy [CMD]
 
-**Command / Diplomatic**  
-- Ambassador [CMD]  
-- Envoy [CMD]  
-
-**Captains**  
-- Captain II [D&I]  
+- Captain II [D&I]
 - Captain I [D&I]
 
-**Customized Progression**
-- Shock Trooper I [LR]  
-- Shock Trooper II [LR]  
-- Volt Specialist I [LR]  
-- Volt Specialist II [MR]  
-- Storm Corporal I [MR]  
-- Storm Corporal II [MR]  
-- Thunder Sergeant I [MR]  
-- Thunder Sergeant II [MR]  
-- Arc Lieutenant I [MR]  
-- Arc Lieutenant II [MR]  
-- Tempest Major [CMD]  
-- Electro Colonel [CMD]  
-- Stormmarshal [CCM]
+- Arc Lieutenant II [MR]
+- Arc Lieutenant I [MR]
+- Thunder Sergeant II [MR]
+- Thunder Sergeant I [MR]
+- Storm Corporal II [MR]
+- Storm Corporal I [MR]
+- Volt Specialist II [LR/MR]
+- Volt Specialist I [LR]
+- Shock Trooper II [LR]
+- Shock Trooper I [LR]
 
-> Levels: LR = Low Rank, MR = Medium Rank, D&I = Diplomat/Intermediate, CMD = Command, CCM = Central Command, LDR = Leadership
+- Suspended [L&M]  (system‑moved via Punishment_Trial)
+- Initiate [L&M]
+- Guest [L&M]  (ignored by system)
 
-## 3) Points Economy
-- **Sources**: Activity ticks (time in server), **KOs/WOs** deltas, training attendance, operations participation, commendations, mission objectives, staff recommendations.
-- **Sinks**: Inactivity decay, formal warnings/punishments, friendly‑fire penalties, unsportsmanlike conduct.
-- **Caps**: Per‑day and per‑week caps prevent farming and inflate‑control.
-- **Anti‑abuse**: Per‑action cooldowns, anomaly detection (sudden spikes), server IP/instance correlation, and audit reviews.
+## Punishment fields (policy)
+- `punishments.trial_days` (int): how long Suspended lasts by default
+- `punishments.trial_lock_promotion` (bool): lock promotions while suspended
+- `punishments.escalation_warn_threshold` (int): e.g., 7 => ban
 
-### Baseline Weights (example)
-- Activity Tick (5 min): +1
-- Training Complete: +15
-- Operation Complete: +25
-- KO: +0.25 (PVP only; clamped)
-- WO (death): −0.10 (clamped; no negative farming)
-- Recommendation (Cmd/CCM): +10/+20 (rate‑limited)
+## Enforcement flow (simplified)
+1. A CMD/CCM issues `/warn <user> <reason>` which increments `warn_count` and writes audit event.
+2. After increment, `promotions.eval` or `punishment.eval` checks thresholds.
+3. If `warn_count >= punish.trial_threshold` (config=4), system enacts `Punishment_Trial`: set role=Suspended, suspend points gains, set `suspended_until = now + trial_days`.
+4. If `warn_count >= punish.severe_threshold` (config=7), system enacts `Punishment_Severe`: ban flag, disable account activities, and notify CCM/LDR for manual review.
+5. AutoPromote Bot must **never** automatically ban without explicit severe threshold hit; all auto actions remain reversible only by LDR/CCM with audit entries.
 
-## 4) Promotion Rules
-- Each rank R has **MinPoints[R]**, **MinTimeInRank[R]**, **ConductScore≥T**, and optionally **Required Recs**.
-- **AutoPromote**: If all conditions met, queue for bot verification and execute.
-- **Grace Windows**: On demotion triggers (e.g., severe conduct), lock promotions for N days.
-- **Manual Overrides**: Cmd/CCM can override with reason; all overrides are audit‑logged.
-
-Example (illustrative—tune in policy JSON):
-```
-Shock Trooper I -> Shock Trooper II:
-  MinPoints: 50, MinTimeInRank: 2 days, NoWarnings: true
-
-Arc Lieutenant II -> Tempest Major:
-  MinPoints: 1200, MinTimeInRank: 14 days, Recs: 1 (CCM)
-```
-All thresholds are configurable in `config/policy.ranks.json`.
-
-## 5) Permissions Matrix (subset)
-- **Member**: view self stats, leaderboard, shouts.
-- **Sergeants+**: open squad tools, file commendations/warnings (limited).
-- **Lieutenants+**: approve training results, request promotions.
-- **Captains+**: approve operations, mass add points (bounded sets).
-- **Cmd**: search, inspect, add/deduct points, warn groups, approve/dismiss promotion queues.
-- **CCM/LDR**: strategy flags, policy edits, final promotions to CCM/LDR.
-
-## 6) Commands
-- `/getpoints [user?]`
-- `/getkos [user?]`  `/getwos [user?]`
-- `/commend <user> <+points> <reason>`
-- `/warn <user|group> <reason>`
-- `/promote <user> [reason]` (policy‑checked; queues if not auto)
-- `/deduct <user> <points> <reason>`
-
-All commands are permission‑gated and audit‑logged.
-
-## 7) UI (NEXUS)
-- **Member Panel**: Shouts, profile, current vs next rank, joined divisions, avatar/name, leaderboard.
-- **Command Panel**: Search, member drill‑down, points add/deduct, warnings, batch ops, recommendations viewer.
-- Real‑time status: API link, datastore health, bot status.
-
-## 8) Security
-- RBAC by in‑group role + in‑experience badge.
-- Signed server‑to‑server calls (HMAC w/ rotation).
-- Anti‑tamper: server‑authoritative writes; client only reads and submits requests.
-- Rate limiting & circuit breakers for external API calls.
-
-## 9) Files & Config (expected in implementation)
-```
-/src
-  /roblox
-    /client
-    /server
-    /shared
-  /bot
-    /jobs
-    /lib
-/config
-  policy.ranks.json
-  policy.points.json
-  permissions.json
-/docs (this repo)
-```
-
-## 10) Testing
-- Unit tests for calculators and validators.
-- Simulation scripts for promotions/demotions under random workloads.
-- Golden data snapshots for deterministic leaderboard ordering.
+## Config storage
+- `config/policy.ranks.json` — rank thresholds and levels.
+- `config/policy.points.json` — point weights & caps.
+- `config/policy.punishments.json` — warning thresholds & trial duration.
+- `config/permissions.json` — mapping of ranks to command permissions.
