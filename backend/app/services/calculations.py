@@ -57,14 +57,14 @@ class CalculationService:
         player.privileged = bool(payload["privileged"])
         player.previous_rank = payload["previous_rank"]
         player.next_rank = payload["next_rank"]
-        player.metadata = {"decisionsBlocked": payload["decisions_blocked"]}
+        player.metadata_payload = {"decisionsBlocked": payload["decisions_blocked"]}
         return player
 
     def serialize_player(self, player: Player) -> dict:
         descriptor = self.policy.get_rank(player.rank)
         next_rank = self.policy.next_rank_by_name(player.rank) if descriptor else None
         previous_rank = self.policy.previous_rank_by_name(player.rank) if descriptor else None
-        decisions_blocked = bool(player.metadata and player.metadata.get("decisionsBlocked")) or (
+        decisions_blocked = bool(player.metadata_payload and player.metadata_payload.get("decisionsBlocked")) or (
             player.punishment_status == "Trial_Punishment"
         )
 
@@ -88,7 +88,7 @@ class CalculationService:
             "nextRankRequiredPoints": next_rank.min_points if next_rank else None,
             "previousRankRequiredPoints": previous_rank.min_points if previous_rank else None,
             "decisionsBlocked": decisions_blocked,
-            "metadata": player.metadata or {},
+            "metadata": player.metadata_payload or {},
         }
 
 

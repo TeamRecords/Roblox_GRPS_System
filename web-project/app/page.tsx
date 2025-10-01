@@ -31,6 +31,10 @@ export default async function Home() {
   const commandLeads = players.slice(0, 3)
   const extendedRoster = players.slice(3)
   const latestUpdate = formatTimestamp(players[0])
+  const topKosValue = records.kos[0]?.kos ?? null
+  const topWosValue = records.wos[0]?.wos ?? null
+  const hasLeaderboardData = players.length > 0
+  const hasRecordData = records.kos.length > 0 || records.wos.length > 0
 
   return (
     <div className="relative">
@@ -59,18 +63,38 @@ export default async function Home() {
                 <div className="panel-muted p-6">
                   <p className="text-xs uppercase tracking-[0.35em] text-zinc-500">KO dossiers</p>
                   <p className="mt-3 text-3xl font-semibold text-yellow-200" data-signal>
-                    {records.kos.length.toLocaleString()}
+                    {formatNumber(topKosValue)}
                   </p>
                   <p className="text-xs text-zinc-500">Highest confirmed eliminations.</p>
                 </div>
                 <div className="panel-muted p-6">
-                  <p className="text-xs uppercase tracking-[0.35em] text-zinc-500">Last sync</p>
+                  <p className="text-xs uppercase tracking-[0.35em] text-zinc-500">WO dossiers</p>
                   <p className="mt-3 text-3xl font-semibold text-yellow-200" data-signal>
-                    {latestUpdate}
+                    {formatNumber(topWosValue)}
                   </p>
-                  <p className="text-xs text-zinc-500">Pulled over secure API endpoints.</p>
+                  <p className="text-xs text-zinc-500">Highest recorded wipeouts.</p>
+                  <div className="mt-6 border-t border-zinc-800/60 pt-4 text-xs text-zinc-500">
+                    <p className="uppercase tracking-[0.35em]">Last sync</p>
+                    <p className="mt-1 text-base font-semibold text-yellow-200" data-signal>
+                      {latestUpdate}
+                    </p>
+                    <p className="mt-1 text-[0.7rem] leading-relaxed text-zinc-500">
+                      Pulled over secure API endpoints.
+                    </p>
+                  </div>
                 </div>
               </div>
+              {!hasLeaderboardData && (
+                <div className="panel-muted border border-dashed border-yellow-500/40 p-6 text-sm text-zinc-400">
+                  Nothing here yet. The automation service will publish the first operatives as soon as a Roblox snapshot is
+                  ingested.
+                </div>
+              )}
+              {hasLeaderboardData && !hasRecordData && (
+                <div className="panel-muted border border-dashed border-yellow-500/40 p-6 text-sm text-zinc-400">
+                  Player telemetry is live, but no record eliminations have been reported yet. Keep an eye on the Neon feed.
+                </div>
+              )}
             </div>
             <aside className="panel p-8 lg:w-80">
               <p className="text-xs uppercase tracking-[0.35em] text-zinc-500">Security briefing</p>
