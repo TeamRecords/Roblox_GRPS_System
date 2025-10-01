@@ -1,5 +1,7 @@
 import { prisma } from './db'
 
+type PrismaPlayer = Awaited<ReturnType<(typeof prisma)['player']['findMany']>>[number]
+
 export type LeaderboardPlayer = {
   userId: number
   username: string
@@ -52,7 +54,7 @@ export async function fetchTopPlayers(limit = 30): Promise<LeaderboardPlayer[]> 
       take: limit
     })
 
-    return players.map((player) => ({
+    return players.map((player: PrismaPlayer) => ({
       userId: player.userId,
       username: player.username,
       rank: player.rank ?? null,
@@ -81,12 +83,12 @@ export async function fetchRecordHolders(limit = 5): Promise<LeaderboardRecords>
     ])
 
     return {
-      kos: topKos.map((player) => ({
+      kos: topKos.map((player: PrismaPlayer) => ({
         userId: player.userId,
         username: player.username,
         kos: player.kos ?? null
       })),
-      wos: topWos.map((player) => ({
+      wos: topWos.map((player: PrismaPlayer) => ({
         userId: player.userId,
         username: player.username,
         wos: player.wos ?? null
