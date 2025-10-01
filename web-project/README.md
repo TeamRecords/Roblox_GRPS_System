@@ -9,6 +9,6 @@ npx prisma generate && npx prisma db push
 npm run dev
 ```
 
-Local dev uses built-in mock API routes under `/api/*`. In prod, set `NEXT_PUBLIC_GRPS_API` to your read-only GRPS endpoint.
-Turnstile: client retrieves token; server verifies via `POST /api/turnstile`.
-Roblox Open Cloud: use for authenticated tasks; publish read-only snapshots for the site to consume via HTTP.
+Local dev uses built-in mock API routes under `/api/*`. In prod, set `NEXT_PUBLIC_AUTOMATION_BASE_URL` to the Python automation service (`https://automation.example.com`).
+Turnstile: client retrieves token; server verifies via `POST /api/turnstile` which forwards to the automation service `/webhooks/turnstile` endpoint.
+Roblox Open Cloud: use for authenticated tasks; publish read-only snapshots for the site to consume via HTTP, or delegate to the automation `/sync/roblox` endpoint.
