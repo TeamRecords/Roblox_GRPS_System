@@ -1,5 +1,3 @@
-# LEGAL.md
-
 ## Copyright Notice
 © 2025 TeamRecords. All Rights Reserved.
 
