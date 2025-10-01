@@ -1,19 +1,19 @@
 {
   "ranks": [
     {
-      "name": "Initiate",
-      "minPoints": 0,
-      "minTimeDays": 0,
-      "level": "LR",
-      "roleId": 1
-    },
-    {
       "name": "Suspended",
       "minPoints": 0,
       "minTimeDays": 0,
       "level": "Trial",
       "isPunishment": true,
       "roleId": 2
+    },
+    {
+      "name": "Initiate",
+      "minPoints": 0,
+      "minTimeDays": 0,
+      "level": "LR",
+      "roleId": 1
     },
     {
       "name": "Shock Trooper I",
@@ -173,8 +173,8 @@
     },
     {
       "name": "Imperator",
-      "minPoints": 0,
-      "minTimeDays": 0,
+      "minPoints": 45000,
+      "minTimeDays": 400,
       "level": "LDR",
       "privileged": true,
       "roleId": 255
