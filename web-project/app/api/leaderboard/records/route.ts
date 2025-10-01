@@ -1,1 +1,9 @@
-export async function GET(){const kos=[{userId:1,username:'Alpha',kos:1245},{userId:2,username:'Bravo',kos:1190},{userId:3,username:'Charlie',kos:1104},{userId:4,username:'Delta',kos:1060},{userId:5,username:'Echo',kos:1002}];const wos=[{userId:6,username:'Orion',wos:980},{userId:7,username:'Nova',wos:940},{userId:8,username:'Vega',wos:900},{userId:9,username:'Rhea',wos:870},{userId:10,username:'Zeph',wos:850}];return new Response(JSON.stringify({kos,wos}),{headers:{'content-type':'application/json'}})}
+import { getRecordHolders } from '@/lib/leaderboard'
+
+export async function GET() {
+  const { kos, wos } = getRecordHolders()
+
+  return new Response(JSON.stringify({ kos, wos }), {
+    headers: { 'content-type': 'application/json' }
+  })
+}
