@@ -1,119 +1,119 @@
 {
   "ranks": [
     {
+      "name": "Initiate",
+      "minPoints": 0,
+      "minTimeDays": 0,
+      "level": "LR",
+      "roleId": 1
+    },
+    {
       "name": "Suspended",
       "minPoints": 0,
       "minTimeDays": 0,
       "level": "Trial",
       "isPunishment": true,
-      "roleId": 101
-    },
-    {
-      "name": "Initiate",
-      "minPoints": 0,
-      "minTimeDays": 0,
-      "level": "LR",
-      "roleId": 102
+      "roleId": 2
     },
     {
       "name": "Shock Trooper I",
       "minPoints": 50,
       "minTimeDays": 1,
       "level": "LR",
-      "roleId": 103
+      "roleId": 4
     },
     {
       "name": "Shock Trooper II",
       "minPoints": 150,
       "minTimeDays": 2,
       "level": "LR",
-      "roleId": 104
+      "roleId": 5
     },
     {
       "name": "Volt Specialist I",
       "minPoints": 300,
       "minTimeDays": 3,
       "level": "LR",
-      "roleId": 105
+      "roleId": 6
     },
     {
       "name": "Volt Specialist II",
       "minPoints": 500,
       "minTimeDays": 4,
-      "level": "MR",
-      "roleId": 106
+      "level": "LR",
+      "roleId": 7
     },
     {
       "name": "Storm Corporal I",
       "minPoints": 750,
       "minTimeDays": 5,
-      "level": "MR",
-      "roleId": 107
+      "level": "LR",
+      "roleId": 8
     },
     {
       "name": "Storm Corporal II",
       "minPoints": 1000,
       "minTimeDays": 7,
       "level": "MR",
-      "roleId": 108
+      "roleId": 9
     },
     {
       "name": "Thunder Sergeant I",
       "minPoints": 1400,
       "minTimeDays": 9,
       "level": "MR",
-      "roleId": 109
+      "roleId": 10
     },
     {
       "name": "Thunder Sergeant II",
       "minPoints": 1800,
       "minTimeDays": 11,
       "level": "MR",
-      "roleId": 110
+      "roleId": 11
     },
     {
       "name": "Arc Lieutenant I",
       "minPoints": 2200,
       "minTimeDays": 14,
       "level": "MR",
-      "roleId": 111
+      "roleId": 12
     },
     {
       "name": "Arc Lieutenant II",
       "minPoints": 2600,
       "minTimeDays": 16,
       "level": "MR",
-      "roleId": 112
+      "roleId": 13
     },
     {
       "name": "Captain I",
       "minPoints": 3000,
       "minTimeDays": 18,
-      "level": "D&I",
-      "roleId": 113
+      "level": "MR",
+      "roleId": 14
     },
     {
       "name": "Captain II",
       "minPoints": 3200,
       "minTimeDays": 21,
-      "level": "D&I",
-      "roleId": 114
+      "level": "MR",
+      "roleId": 15
     },
     {
       "name": "Envoy",
       "minPoints": 3600,
       "minTimeDays": 24,
-      "level": "CMD",
+      "level": "D&I",
       "privileged": true,
-      "roleId": 115
+      "roleId": 17
     },
     {
       "name": "Ambassador",
       "minPoints": 4000,
       "minTimeDays": 28,
-      "level": "CMD",
+      "level": "D&I",
       "privileged": true,
-      "roleId": 116
+      "roleId": 18
     },
     {
       "name": "Tempest Major",
@@ -121,7 +121,7 @@
       "minTimeDays": 32,
       "level": "CMD",
       "privileged": true,
-      "roleId": 117
+      "roleId": 20
     },
     {
       "name": "Electro Colonel",
@@ -129,7 +129,7 @@
       "minTimeDays": 40,
       "level": "CMD",
       "privileged": true,
-      "roleId": 118
+      "roleId": 21
     },
     {
       "name": "Brigadier General",
@@ -137,7 +137,7 @@
       "minTimeDays": 50,
       "level": "CCM",
       "privileged": true,
-      "roleId": 119
+      "roleId": 22
     },
     {
       "name": "Stormmarshal",
@@ -145,7 +145,7 @@
       "minTimeDays": 60,
       "level": "CCM",
       "privileged": true,
-      "roleId": 120
+      "roleId": 23
     },
     {
       "name": "Supreme Admirals",
@@ -153,7 +153,7 @@
       "minTimeDays": 75,
       "level": "CCM",
       "privileged": true,
-      "roleId": 121
+      "roleId": 25
     },
     {
       "name": "Supreme Command",
@@ -161,7 +161,7 @@
       "minTimeDays": 90,
       "level": "LDR",
       "privileged": true,
-      "roleId": 122
+      "roleId": 26
     },
     {
       "name": "Supreme Council",
@@ -169,15 +169,15 @@
       "minTimeDays": 110,
       "level": "LDR",
       "privileged": true,
-      "roleId": 123
+      "roleId": 27
     },
     {
       "name": "Imperator",
-      "minPoints": 20000,
-      "minTimeDays": 130,
+      "minPoints": 0,
+      "minTimeDays": 0,
       "level": "LDR",
       "privileged": true,
-      "roleId": 124
+      "roleId": 255
     }
   ]
 }
