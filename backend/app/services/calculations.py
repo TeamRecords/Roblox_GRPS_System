@@ -83,10 +83,12 @@ class CalculationService:
             "privileged": bool(player.privileged),
             "punishmentStatus": player.punishment_status,
             "punishmentExpiresAt": player.punishment_expires_at,
+            "createdAt": player.created_at,
             "lastSyncedAt": player.last_synced_at,
             "nextRankRequiredPoints": next_rank.min_points if next_rank else None,
             "previousRankRequiredPoints": previous_rank.min_points if previous_rank else None,
             "decisionsBlocked": decisions_blocked,
+            "metadata": player.metadata or {},
         }
 
 

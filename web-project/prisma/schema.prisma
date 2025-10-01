@@ -9,21 +9,38 @@ datasource db {
 }
 
 model Player {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @unique
-  username  String
-  rank      String?
-  points    Int?     @default(0)
-  kos       Int?     @default(0)
-  wos       Int?     @default(0)
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  userId              BigInt    @id @map("user_id")
+  username            String
+  displayName         String?   @map("display_name")
+  rank                String
+  previousRank        String?   @map("previous_rank")
+  nextRank            String?   @map("next_rank")
+  points              Int       @default(0) @map("rank_points")
+  kos                 Int       @default(0)
+  wos                 Int       @default(0)
+  warnings            Int       @default(0)
+  recommendations     Int       @default(0)
+  privileged          Boolean   @default(false)
+  punishmentStatus    String?   @map("punishment_status")
+  punishmentExpiresAt DateTime? @map("punishment_expires_at")
+  metadata            Json?
+  createdAt           DateTime  @default(now()) @map("created_at")
+  lastSyncedAt        DateTime  @default(now()) @map("last_synced_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
 
   @@index([points, kos, wos], map: "player_score_index")
+  @@map("players")
 }
 
 model Snapshot {
-  id      Int      @id @default(autoincrement())
-  takenAt DateTime @default(now())
-  payload Json
+  id            BigInt   @id @default(autoincrement())
+  userId        BigInt   @map("user_id")
+  payload       Json
+  source        String   @default("roblox")
+  experienceKey String?  @map("experience_key")
+  actorUserId   BigInt?  @map("actor_user_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@map("player_snapshots")
 }

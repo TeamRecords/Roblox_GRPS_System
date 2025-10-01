@@ -2,6 +2,14 @@ import { prisma } from './db'
 
 type PrismaPlayer = Awaited<ReturnType<(typeof prisma)['player']['findMany']>>[number]
 
+function toNumber(value: number | bigint | null | undefined): number | null {
+  if (value === null || value === undefined) {
+    return null
+  }
+
+  return Number(value)
+}
+
 export type LeaderboardPlayer = {
   userId: number
   username: string
@@ -55,12 +63,12 @@ export async function fetchTopPlayers(limit = 30): Promise<LeaderboardPlayer[]> 
     })
 
     return players.map((player: PrismaPlayer) => ({
-      userId: player.userId,
+      userId: Number(player.userId),
       username: player.username,
       rank: player.rank ?? null,
-      points: player.points ?? null,
-      kos: player.kos ?? null,
-      wos: player.wos ?? null,
+      points: toNumber(player.points),
+      kos: toNumber(player.kos),
+      wos: toNumber(player.wos),
       updatedAt: player.updatedAt
     }))
   } catch (error) {
@@ -84,14 +92,14 @@ export async function fetchRecordHolders(limit = 5): Promise<LeaderboardRecords>
 
     return {
       kos: topKos.map((player: PrismaPlayer) => ({
-        userId: player.userId,
+        userId: Number(player.userId),
         username: player.username,
-        kos: player.kos ?? null
+        kos: toNumber(player.kos)
       })),
       wos: topWos.map((player: PrismaPlayer) => ({
-        userId: player.userId,
+        userId: Number(player.userId),
         username: player.username,
-        wos: player.wos ?? null
+        wos: toNumber(player.wos)
       }))
     }
   } catch (error) {

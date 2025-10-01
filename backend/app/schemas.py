@@ -56,7 +56,9 @@ class PlayerRecord(BaseModel):
     privileged: bool
     punishment_status: Optional[str] = Field(None, alias="punishmentStatus")
     punishment_expires_at: Optional[datetime] = Field(None, alias="punishmentExpiresAt")
+    created_at: datetime = Field(..., alias="createdAt")
     last_synced_at: datetime = Field(..., alias="lastSyncedAt")
+    metadata: Dict[str, Any] = Field(default_factory=dict)
 
 
 class PlayerWithContext(PlayerRecord):
