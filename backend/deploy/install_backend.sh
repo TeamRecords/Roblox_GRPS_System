@@ -1,5 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
+
+trap 'log "An unexpected error occurred. Check the log above for details."' ERR
 
 # Provision the GRPS backend on Ubuntu 24.04 (Vultr Dedicated Cloud).
 # This script assumes you are running as root on a fresh server.
@@ -13,6 +15,24 @@ REPO_URL="${REPO_URL:-https://github.com/ArcFoundation/Roblox_GRPS_System.git}"
 
 log() {
   echo "[install_backend] $*"
+}
+
+require_root() {
+  if [[ "${EUID:-$(id -u)}" -ne 0 ]]; then
+    log "This installer must be executed as root (try: sudo bash ./install_backend.sh)"
+    exit 1
+  fi
+}
+
+ensure_prereqs() {
+  log "Ensuring core tools are available"
+  local required=(apt git curl rsync)
+  for tool in "${required[@]}"; do
+    if ! command -v "$tool" >/dev/null 2>&1; then
+      log "Missing required command: $tool"
+      exit 1
+    fi
+  done
 }
 
 ensure_user() {
@@ -60,6 +80,8 @@ install_service() {
 }
 
 main() {
+  require_root
+  ensure_prereqs
   install_packages
   ensure_user
   clone_repo
