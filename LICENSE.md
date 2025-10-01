@@ -1,4 +1,4 @@
-## Copyright Notice
+# Copyright Notice
 © 2025 TeamRecords. All Rights Reserved.
 
 This repository, including but not limited to the **GRPS System** and all related source code, assets, documentation, and files contained herein, is the exclusive intellectual property of **TeamRecords** ("the Owner").
