@@ -1,4 +1,7 @@
-const DEFAULT_BASE_URL = process.env.NEXT_PUBLIC_AUTOMATION_BASE_URL ?? 'http://localhost:8000'
+const DEFAULT_BASE_URL =
+  process.env.GRPS_AUTOMATION_BASE_URL ??
+  process.env.NEXT_PUBLIC_AUTOMATION_BASE_URL ??
+  'http://localhost:8000'
 
 export type SyncResponse = {
   updated: number
