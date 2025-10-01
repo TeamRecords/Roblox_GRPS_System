@@ -46,10 +46,13 @@ The repository ships with `backend/deploy/install_backend.sh`, which automates t
 
 ```bash
 cd /opt
-sudo curl -fsSL -o install_backend.sh https://raw.githubusercontent.com/ArcFoundation/Roblox_GRPS_System/main/backend/deploy/install_backend.sh
+sudo curl -fsSL -o install_backend.sh https://raw.githubusercontent.com/ArcFoundation/Roblox_GRPS_System/HEAD/backend/deploy/install_backend.sh
 sudo chmod 755 install_backend.sh
 sudo head -n 20 install_backend.sh
 ```
+
+> We reference `HEAD` instead of a specific branch name (`main`, `work`, etc.) so the command keeps working if the repository's
+> default branch changes.
 
 The `head` output lets you confirm that you fetched the shell script (instead of an HTML error page). If it looks good, execute it:
 
