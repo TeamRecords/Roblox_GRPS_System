@@ -1,7 +1,7 @@
 {
   "automation": {
     "serviceName": "grps-automation",
-    "baseUrl": "https://automation.example.com",
+    "baseUrl": "https://grps.arcfoundation.net",
     "healthEndpoint": "/health/live",
     "leaderboardEndpoint": "/leaderboard",
     "syncEndpoint": "/sync/roblox",
@@ -15,7 +15,7 @@
     "maxConnections": 15
   },
   "web": {
-    "portalBaseUrl": "https://grps.example.com",
+    "portalBaseUrl": "https://rle.arcfoundation.net",
     "turnstileSiteKeyEnv": "TURNSTILE_SITE_KEY",
     "turnstileSecretEnv": "TURNSTILE_SECRET_KEY",
     "nextAutomationBaseEnv": "NEXT_PUBLIC_AUTOMATION_BASE_URL"
