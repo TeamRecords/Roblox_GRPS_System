@@ -9,3 +9,6 @@ Unified, Codex-ready package containing:
 - /docs rank_chart.svg
 - /automatic-web-project (Next.js 15 automation API powering https://automation.arcfoundation.net)
 - /web-project (Next.js 15 + Tailwind + TS + ESLint + Prisma + Turnstile) ready for Vercel
+
+# Legal Restrictions
+Those of you wishing to download or copy the current Github files must view the official LEGAL.md file for more information.
