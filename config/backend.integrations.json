@@ -1,0 +1,40 @@
+{
+  "automation": {
+    "serviceName": "grps-automation",
+    "baseUrl": "https://automation.example.com",
+    "healthEndpoint": "/health/live",
+    "leaderboardEndpoint": "/leaderboard",
+    "syncEndpoint": "/sync/roblox",
+    "signatureHeader": "x-grps-signature"
+  },
+  "database": {
+    "provider": "postgresql",
+    "migrationTool": "alembic",
+    "readReplica": false,
+    "connectionEnv": "DATABASE_URL",
+    "maxConnections": 15
+  },
+  "web": {
+    "portalBaseUrl": "https://grps.example.com",
+    "turnstileSiteKeyEnv": "TURNSTILE_SITE_KEY",
+    "turnstileSecretEnv": "TURNSTILE_SECRET_KEY",
+    "nextAutomationBaseEnv": "NEXT_PUBLIC_AUTOMATION_BASE_URL"
+  },
+  "roblox": {
+    "universeIdEnv": "ROBLOX_UNIVERSE_ID",
+    "apiKeyEnv": "ROBLOX_OPEN_CLOUD_API_KEY",
+    "datastore": {
+      "name": "GRPS_Points",
+      "scope": "global",
+      "keyFormat": "player:{userId}"
+    }
+  },
+  "webhooks": {
+    "discord": "https://discord.com/api/webhooks/...",
+    "slack": "https://hooks.slack.com/services/...",
+    "retryPolicy": {
+      "maxAttempts": 5,
+      "backoffSeconds": [5, 15, 45, 90]
+    }
+  }
+}
