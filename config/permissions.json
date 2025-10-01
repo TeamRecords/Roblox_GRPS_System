@@ -26,11 +26,11 @@
       "canEarn": true
     },
     "Volt Specialist II": {
-      "level": "MR",
+      "level": "LR",
       "canEarn": true
     },
     "Storm Corporal I": {
-      "level": "MR",
+      "level": "LR",
       "canEarn": true
     },
     "Storm Corporal II": {
@@ -54,45 +54,39 @@
       "canEarn": true
     },
     "Captain I": {
-      "level": "D&I",
+      "level": "MR",
       "canEarn": true
     },
     "Captain II": {
-      "level": "D&I",
+      "level": "MR",
       "canEarn": true
     },
     "Envoy": {
-      "level": "CMD",
-      "canWarn": true,
-      "canAdjust": true
+      "level": "D&I",
+      "ignored": true
     },
     "Ambassador": {
-      "level": "CMD",
-      "canWarn": true,
-      "canAdjust": true
+      "level": "D&I",
+      "ignored": true
     },
     "Tempest Major": {
       "level": "CMD",
-      "canWarn": true,
-      "canAdjust": true
+      "canWarn": true
     },
     "Electro Colonel": {
       "level": "CMD",
       "canWarn": true,
-      "canAdjust": true,
-      "canBan": true
+      "canAdjust": true
     },
     "Brigadier General": {
       "level": "CCM",
       "canWarn": true,
-      "canAdjust": true,
-      "canBan": true
+      "canAdjust": true
     },
     "Stormmarshal": {
       "level": "CCM",
       "canWarn": true,
-      "canAdjust": true,
-      "canBan": true
+      "canAdjust": true
     },
     "Supreme Admirals": {
       "level": "CCM",
