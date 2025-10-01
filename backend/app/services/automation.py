@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import secrets
 from datetime import datetime, timedelta
+import logging
 from typing import Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,8 +10,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from ..config import get_settings
 from ..models import Player
 from ..schemas import AutomationDecision
+from .calculations import CalculationService
 from .rank_policy import RankPolicy, get_rank_policy
 from .roblox_client import RobloxClient
+
+
+logger = logging.getLogger(__name__)
 
 
 class AutomationService:
@@ -21,10 +26,13 @@ class AutomationService:
         session: AsyncSession,
         policy: Optional[RankPolicy] = None,
         roblox_client: Optional[RobloxClient] = None,
+        calculator: Optional[CalculationService] = None,
     ):
         self.session = session
         self.policy = policy or get_rank_policy()
         self.roblox = roblox_client or RobloxClient()
+        self.calculator = calculator or CalculationService(self.policy)
+        self.settings = get_settings()
 
     async def evaluate(self, player: Player, *, apply: bool = False, reason: Optional[str] = None, actor_user_id: Optional[int] = None) -> AutomationDecision:
         action, target_rank, message = self._resolve_action(player)
@@ -73,6 +81,7 @@ class AutomationService:
             player.punishment_status = "Punishment_Severe"
         player.last_synced_at = datetime.utcnow()
         await self.session.flush()
+        await self._publish_player_state(player)
 
     async def _transition_rank(self, player: Player, rank_name: str) -> None:
         role = self.policy.get_rank(rank_name)
@@ -83,6 +92,34 @@ class AutomationService:
         await self.roblox.update_group_role(player.user_id, role.role_id)
         player.previous_rank = player.rank
         player.rank = rank_name
+
+    async def _publish_player_state(self, player: Player) -> None:
+        settings = self.settings
+        if not settings.open_cloud_api_key or not settings.default_universe_id:
+            return
+
+        datastore = settings.datastore_name
+        scope = settings.datastore_scope or "global"
+        key = f"{settings.datastore_key_prefix}{player.user_id}"
+
+        payload = self.calculator.serialize_player(player)
+        serialised = {}
+        for field, value in payload.items():
+            if isinstance(value, datetime):
+                serialised[field] = value.isoformat()
+            else:
+                serialised[field] = value
+
+        try:
+            await self.roblox.write_datastore(
+                settings.default_universe_id,
+                datastore,
+                scope,
+                key,
+                serialised,
+            )
+        except Exception as exc:  # pragma: no cover - network failures shouldn't crash automation
+            logger.warning("Failed to push player state to Roblox datastore: %s", exc)
 
 
 __all__ = ["AutomationService"]

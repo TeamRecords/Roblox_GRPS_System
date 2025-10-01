@@ -14,7 +14,11 @@ _SessionMaker: async_sessionmaker[AsyncSession] | None = None
 
 def create_engine() -> AsyncEngine:
     settings = get_settings()
-    database_url = settings.database_url or "sqlite+aiosqlite:///:memory:"
+    database_url = (
+        settings.database_url
+        or settings.prisma_database_url
+        or "sqlite+aiosqlite:///:memory:"
+    )
     engine = create_async_engine(database_url, echo=settings.environment == "development", future=True)
     return engine
 
