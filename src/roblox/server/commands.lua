@@ -82,4 +82,87 @@ function Commands:warn(actor, targetUserId, reason)
   return true, { count = warnCount, status = status }
 end
 
+function Commands:adjustPoints(actor, targetUserId, amount, reason, options)
+  options = options or {}
+
+  local limit = self.permissions:getAdjustLimit(actor)
+  if not limit then
+    self.logger({
+      action = "ADJUST_DENIED",
+      actor = actor,
+      targetUserId = targetUserId,
+      amount = amount,
+      reason = reason,
+      reasonCode = "NO_PERMISSION",
+    })
+    return false, "NO_PERMISSION"
+  end
+
+  if type(amount) ~= "number" then
+    self.logger({
+      action = "ADJUST_DENIED",
+      actor = actor,
+      targetUserId = targetUserId,
+      amount = amount,
+      reason = reason,
+      reasonCode = "INVALID_AMOUNT",
+    })
+    return false, "INVALID_AMOUNT"
+  end
+
+  amount = math.floor(amount)
+  if amount == 0 then
+    self.logger({
+      action = "ADJUST_DENIED",
+      actor = actor,
+      targetUserId = targetUserId,
+      amount = amount,
+      reason = reason,
+      reasonCode = "ZERO_DELTA",
+    })
+    return false, "ZERO_DELTA"
+  end
+
+  if math.abs(amount) > limit then
+    self.logger({
+      action = "ADJUST_DENIED",
+      actor = actor,
+      targetUserId = targetUserId,
+      amount = amount,
+      reason = reason,
+      reasonCode = "LIMIT_EXCEEDED",
+      limit = limit,
+    })
+    return false, "LIMIT_EXCEEDED"
+  end
+
+  if type(reason) ~= "string" or reason == "" then
+    self.logger({
+      action = "ADJUST_DENIED",
+      actor = actor,
+      targetUserId = targetUserId,
+      amount = amount,
+      reason = reason,
+      reasonCode = "REASON_REQUIRED",
+    })
+    return false, "REASON_REQUIRED"
+  end
+
+  self.logger({
+    action = "ADJUST_ACCEPTED",
+    actor = actor,
+    targetUserId = targetUserId,
+    amount = amount,
+    reason = reason,
+    limit = limit,
+    metadata = options.metadata,
+  })
+
+  return true, {
+    amount = amount,
+    reason = reason,
+    limit = limit,
+  }
+end
+
 return Commands

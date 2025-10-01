@@ -59,36 +59,43 @@
     },
     "Ambassador": {
       "level": "CMD",
-      "canWarn": true
+      "canWarn": true,
+      "adjustLimit": 25
     },
     "Envoy": {
       "level": "CMD",
-      "canWarn": true
+      "canWarn": true,
+      "adjustLimit": 25
     },
     "Tempest Major": {
       "level": "CMD",
       "canWarn": true,
-      "canBan": false
+      "canBan": false,
+      "adjustLimit": 25
     },
     "Electro Colonel": {
       "level": "CMD",
       "canWarn": true,
-      "canBan": true
+      "canBan": true,
+      "adjustLimit": 25
     },
     "Brigadier General": {
       "level": "CCM",
       "canWarn": true,
-      "canBan": true
+      "canBan": true,
+      "adjustLimit": 25
     },
     "Stormmarshal": {
       "level": "CCM",
       "canWarn": true,
-      "canBan": true
+      "canBan": true,
+      "adjustLimit": 25
     },
     "Imperator": {
       "level": "LDR",
       "canWarn": true,
-      "canBan": true
+      "canBan": true,
+      "adjustLimit": 25
     }
   }
 }

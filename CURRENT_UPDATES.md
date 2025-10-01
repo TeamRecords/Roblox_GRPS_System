@@ -19,7 +19,8 @@
 2. Place `server` modules under `ServerScriptService/GRPS` and `shared` modules under `ReplicatedStorage/GRPSShared`.
 3. Configure `DataStoreService` API access level to `Open Cloud` for automation and ensure ordered datastore is enabled for leaderboards.
 4. Configure the new Open Cloud adapter with the API key, universe ID, datastore name, and scope (see `config/backend.integrations.json`).
-5. Grant the automation service's API key permission to read/write the GRPS datastore via Roblox Open Cloud.
+5. For satellite universes (training arenas, patrol hubs, etc.), copy the three bridge scripts from `/src/roblox/shared/bridge` into `ServerScriptService/GRPSBridge` (keeping `ExperienceServer` as a Script and the other two as ModuleScripts). Update `ExperienceConfig` with the experience key, API URL, and command ranks before publishing.
+6. Grant the automation service's API key permission to read/write the GRPS datastore via Roblox Open Cloud.
 
 ### 3. Python Automation Service (FastAPI)
 1. Review and materialise the reference implementation in `backend/automation.md` as `backend/service.py`.

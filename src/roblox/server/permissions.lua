@@ -118,4 +118,41 @@ function Permissions:isIgnored(actor)
   return descriptor and descriptor.ignored == true
 end
 
+local function adjustLimit(descriptor)
+  if not descriptor then
+    return nil
+  end
+
+  local limit = descriptor.adjustLimit or descriptor.adjust_limit or descriptor.maxAdjust
+  if limit == nil then
+    return nil
+  end
+
+  limit = tonumber(limit)
+  if limit and limit > 0 then
+    return limit
+  end
+
+  return nil
+end
+
+function Permissions:getAdjustLimit(actor)
+  local descriptor = select(1, self:resolveRole(actor))
+  return adjustLimit(descriptor)
+end
+
+function Permissions:canAdjustPoints(actor, amount)
+  local limit = self:getAdjustLimit(actor)
+  if not limit then
+    return false
+  end
+
+  if amount == nil then
+    return true
+  end
+
+  local magnitude = math.abs(amount)
+  return magnitude <= limit
+end
+
 return Permissions
