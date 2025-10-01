@@ -3,7 +3,7 @@
     "serviceName": "grps-automation",
     "baseUrl": "https://grps.arcfoundation.net",
     "healthEndpoint": "/health/live",
-    "leaderboardEndpoint": "/leaderboard",
+    "leaderboardEndpoint": "/leaderboard/top",
     "syncEndpoint": "/sync/roblox",
     "signatureHeader": "x-grps-signature"
   },

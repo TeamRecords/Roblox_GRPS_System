@@ -6,13 +6,18 @@ export type SyncResponse = {
 }
 
 export type LeaderboardEntry = {
-  user_id: number
+  userId: number
   username: string
   rank: string | null
   points: number | null
   kos: number | null
   wos: number | null
-  updated_at: string | null
+  lastSyncedAt: string | null
+}
+
+export type LeaderboardRecords = {
+  kos: Array<{ userId: number; username: string; kos: number | null }>
+  wos: Array<{ userId: number; username: string; wos: number | null }>
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -49,7 +54,8 @@ export async function triggerRobloxSync(signature: string, payload: { activity: 
 
 export async function fetchAutomationLeaderboard(limit = 30): Promise<LeaderboardEntry[]> {
   const params = new URLSearchParams({ limit: String(limit) })
-  return request<LeaderboardEntry[]>(`/leaderboard?${params.toString()}`)
+  const payload = await request<{ players: LeaderboardEntry[] }>(`/leaderboard/top?${params.toString()}`)
+  return payload.players
 }
 
 export async function fetchAutomationHealth(): Promise<{ status: string }> {
@@ -58,4 +64,9 @@ export async function fetchAutomationHealth(): Promise<{ status: string }> {
 
 export async function fetchAutomationMetrics(): Promise<{ totalPlayers: number; updatedLastHour: number }> {
   return request<{ totalPlayers: number; updatedLastHour: number }>('/metrics/health')
+}
+
+export async function fetchAutomationRecords(limit = 5): Promise<LeaderboardRecords> {
+  const params = new URLSearchParams({ limit: String(limit) })
+  return request<LeaderboardRecords>(`/leaderboard/records?${params.toString()}`)
 }
