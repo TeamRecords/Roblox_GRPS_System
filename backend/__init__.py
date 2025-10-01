@@ -1,3 +1,5 @@
 """GRPS backend package initialiser for test discovery."""
 
-__all__ = []
+from .__main__ import main
+
+__all__ = ["main"]
