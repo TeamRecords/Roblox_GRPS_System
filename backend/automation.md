@@ -37,6 +37,9 @@ class Settings(BaseSettings):
     database_url: str = Field(..., alias="DATABASE_URL")
     roblox_api_key: str = Field(..., alias="ROBLOX_OPEN_CLOUD_API_KEY")
     roblox_universe_id: int = Field(..., alias="ROBLOX_UNIVERSE_ID")
+    roblox_datastore_name: str = Field(..., alias="ROBLOX_DATASTORE_NAME")
+    roblox_datastore_scope: str = Field("global", alias="ROBLOX_DATASTORE_SCOPE")
+    roblox_datastore_prefix: str | None = Field(None, alias="ROBLOX_DATASTORE_PREFIX")
     automation_signature_secret: str = Field(..., alias="AUTOMATION_SIGNATURE_SECRET")
     turnstile_secret_key: str = Field(..., alias="TURNSTILE_SECRET_KEY")
     webhook_verification_key: str = Field(..., alias="WEBHOOK_VERIFICATION_KEY")
@@ -80,6 +83,8 @@ class SyncRequest(BaseModel):
     activity: str
     limit: int = Field(100, ge=1, le=500)
     cursor: str | None = None
+    scope: str | None = None
+    prefix: str | None = None
 
 
 @app.get("/health/live")
@@ -101,6 +106,9 @@ async def sync_roblox(
             session=session,
             universe_id=settings.roblox_universe_id,
             api_key=settings.roblox_api_key,
+            datastore=settings.roblox_datastore_name,
+            scope=payload.scope or settings.roblox_datastore_scope,
+            key_prefix=payload.prefix or settings.roblox_datastore_prefix,
             activity=payload.activity,
             limit=payload.limit,
             cursor=payload.cursor,
@@ -204,6 +212,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+import json
+
 import httpx
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -224,32 +234,51 @@ async def pull_activity(
     *,
     universe_id: int,
     api_key: str,
+    datastore: str,
+    scope: str = "global",
+    key_prefix: str | None = None,
     activity: str,
     limit: int,
     cursor: str | None,
 ) -> SyncResult:
     headers = {"x-api-key": api_key}
-    params = {"universeId": universe_id, "limit": limit, "cursor": cursor}
+    base_path = f"{ROBLOX_API_BASE}/datastores/v1/universes/{universe_id}/standard-datastores/{datastore}"
+    list_params = {"scope": scope, "limit": limit, "cursor": cursor, "prefix": key_prefix}
+
     async with httpx.AsyncClient(timeout=15) as client:
-        response = await client.get(f"{ROBLOX_API_BASE}/datastores/v1/entries", params=params, headers=headers)
+        response = await client.get(f"{base_path}/entries", params=list_params, headers=headers)
         response.raise_for_status()
+        payload = response.json()
 
-    payload = response.json()
-    updated = created = 0
+        updated = created = 0
 
-    for entry in payload.get("data", []):
-        user_id = int(entry["key"].split(":")[-1])
-        record = await session.get(Player, user_id)
-        if record is None:
-            record = Player(user_id=user_id, username=entry.get("username", "Unknown"))
-            session.add(record)
-            created += 1
-        else:
-            updated += 1
+        for entry in payload.get("data", []):
+            key = entry["key"]
+            detail = await client.get(
+                f"{base_path}/entries/entry",
+                params={"scope": scope, "key": key},
+                headers=headers,
+            )
+            detail.raise_for_status()
 
-        record.points = entry.get("points", record.points)
-        record.kos = entry.get("kos", record.kos)
-        record.wos = entry.get("wos", record.wos)
+            if detail.headers.get("content-type", "").startswith("application/json"):
+                snapshot = detail.json()
+            else:
+                snapshot = json.loads(detail.text)
+
+            user_id = int(snapshot.get("userId") or key.split(":")[-1])
+            record = await session.get(Player, user_id)
+            if record is None:
+                record = Player(user_id=user_id, username=snapshot.get("username", "Unknown"))
+                session.add(record)
+                created += 1
+            else:
+                updated += 1
+
+            record.rank = snapshot.get("rank", record.rank)
+            record.points = snapshot.get("points", record.points)
+            record.kos = snapshot.get("kos", record.kos)
+            record.wos = snapshot.get("wos", record.wos)
 
     job = SyncJob(activity=activity, cursor=payload.get("nextPageCursor"))
     session.add(job)
