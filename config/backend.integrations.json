@@ -21,13 +21,36 @@
     "nextAutomationBaseEnv": "NEXT_PUBLIC_AUTOMATION_BASE_URL"
   },
   "roblox": {
+    "defaultUniverseKey": "nexus",
     "universeIdEnv": "ROBLOX_UNIVERSE_ID",
     "apiKeyEnv": "ROBLOX_OPEN_CLOUD_API_KEY",
     "datastore": {
       "name": "GRPS_Points",
       "scope": "global",
       "keyFormat": "player:{userId}"
-    }
+    },
+    "universes": [
+      {
+        "key": "nexus",
+        "universeIdEnv": "ROBLOX_UNIVERSE_ID",
+        "apiKeyEnv": "ROBLOX_OPEN_CLOUD_API_KEY",
+        "datastore": {
+          "name": "GRPS_Points",
+          "scope": "global",
+          "keyFormat": "player:{userId}"
+        }
+      },
+      {
+        "key": "training_site",
+        "universeIdEnv": "ROBLOX_TRAINING_UNIVERSE_ID",
+        "apiKeyEnv": "ROBLOX_TRAINING_API_KEY",
+        "datastore": {
+          "name": "GRPS_Points",
+          "scope": "global",
+          "keyFormat": "player:{userId}"
+        }
+      }
+    ]
   },
   "webhooks": {
     "discord": "https://discord.com/api/webhooks/...",
