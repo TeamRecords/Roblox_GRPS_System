@@ -97,6 +97,33 @@ class HealthStatus(BaseModel):
     timestamp: datetime
 
 
+class LeaderboardPlayer(BaseModel):
+    user_id: int = Field(..., alias="userId")
+    username: str
+    rank: Optional[str] = None
+    points: Optional[int] = Field(None, alias="points")
+    kos: Optional[int] = None
+    wos: Optional[int] = None
+    last_synced_at: Optional[datetime] = Field(None, alias="lastSyncedAt")
+
+
+class LeaderboardTopResponse(BaseModel):
+    players: list[LeaderboardPlayer]
+    last_synced_at: Optional[datetime] = Field(None, alias="lastSyncedAt")
+
+
+class LeaderboardRecord(BaseModel):
+    user_id: int = Field(..., alias="userId")
+    username: str
+    kos: Optional[int] = None
+    wos: Optional[int] = None
+
+
+class LeaderboardRecordsResponse(BaseModel):
+    kos: list[LeaderboardRecord]
+    wos: list[LeaderboardRecord]
+
+
 __all__ = [
     "AutomationAction",
     "AutomationDecision",
@@ -108,4 +135,8 @@ __all__ = [
     "PlayerSnapshotPayload",
     "PlayerWithContext",
     "SnapshotIngestResponse",
+    "LeaderboardPlayer",
+    "LeaderboardTopResponse",
+    "LeaderboardRecord",
+    "LeaderboardRecordsResponse",
 ]

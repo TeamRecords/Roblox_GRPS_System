@@ -2,12 +2,52 @@ import { prisma } from './db'
 
 type PrismaPlayer = Awaited<ReturnType<(typeof prisma)['player']['findMany']>>[number]
 
+type LeaderboardTopResponse = {
+  players: Array<{
+    userId: number
+    username: string
+    rank?: string | null
+    points?: number | null
+    kos?: number | null
+    wos?: number | null
+    lastSyncedAt?: string | null
+  }>
+  lastSyncedAt?: string | null
+}
+
+type LeaderboardRecordsResponse = {
+  kos: Array<{ userId: number; username: string; kos?: number | null }>
+  wos: Array<{ userId: number; username: string; wos?: number | null }>
+}
+
 function toNumber(value: number | bigint | null | undefined): number | null {
   if (value === null || value === undefined) {
     return null
   }
 
   return Number(value)
+}
+
+function automationBaseUrl(): string | null {
+  return process.env.NEXT_PUBLIC_AUTOMATION_BASE_URL ?? process.env.GRPS_AUTOMATION_BASE_URL ?? null
+}
+
+async function fetchFromAutomation<T>(path: string): Promise<T> {
+  const baseUrl = automationBaseUrl()
+  if (!baseUrl) {
+    throw new Error('Automation base URL not configured')
+  }
+
+  const response = await fetch(`${baseUrl}${path}`, {
+    cache: 'no-store',
+    headers: { 'accept': 'application/json' }
+  })
+
+  if (!response.ok) {
+    throw new Error(`Automation request failed (${response.status})`)
+  }
+
+  return (await response.json()) as T
 }
 
 export type LeaderboardPlayer = {
@@ -54,6 +94,23 @@ const FALLBACK_RECORDS: LeaderboardRecords = {
 
 export async function fetchTopPlayers(limit = 30): Promise<LeaderboardPlayer[]> {
   try {
+    const params = new URLSearchParams({ limit: String(limit) })
+    const payload = await fetchFromAutomation<LeaderboardTopResponse>(`/leaderboard/top?${params.toString()}`)
+
+    return payload.players.map((player) => ({
+      userId: player.userId,
+      username: player.username,
+      rank: player.rank ?? null,
+      points: player.points ?? null,
+      kos: player.kos ?? null,
+      wos: player.wos ?? null,
+      updatedAt: player.lastSyncedAt ? new Date(player.lastSyncedAt) : null
+    }))
+  } catch (error) {
+    console.error('Falling back to Prisma leaderboard payload', error)
+  }
+
+  try {
     const players = await prisma.player.findMany({
       orderBy: [
         { points: 'desc' },
@@ -78,6 +135,26 @@ export async function fetchTopPlayers(limit = 30): Promise<LeaderboardPlayer[]> 
 }
 
 export async function fetchRecordHolders(limit = 5): Promise<LeaderboardRecords> {
+  try {
+    const params = new URLSearchParams({ limit: String(limit) })
+    const payload = await fetchFromAutomation<LeaderboardRecordsResponse>(`/leaderboard/records?${params.toString()}`)
+
+    return {
+      kos: payload.kos.map((entry) => ({
+        userId: entry.userId,
+        username: entry.username,
+        kos: entry.kos ?? null
+      })),
+      wos: payload.wos.map((entry) => ({
+        userId: entry.userId,
+        username: entry.username,
+        wos: entry.wos ?? null
+      }))
+    }
+  } catch (error) {
+    console.error('Falling back to Prisma record payload', error)
+  }
+
   try {
     const [topKos, topWos] = await Promise.all([
       prisma.player.findMany({
