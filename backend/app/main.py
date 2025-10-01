@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .config import get_settings
 from .db import get_engine
 from .models import Base
-from .routes import automation, health, leaderboard, players, roblox
+from .routes import automation, health, leaderboard, players, roblox, sync
 
 app = FastAPI(title="RLE GRPS Backend", version="1.0.0")
 
@@ -40,6 +40,7 @@ app.include_router(roblox.router)
 app.include_router(players.router)
 app.include_router(leaderboard.router)
 app.include_router(automation.router)
+app.include_router(sync.router)
 
 
 __all__ = ["app"]

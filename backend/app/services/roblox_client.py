@@ -47,6 +47,50 @@ class RobloxClient:
         url = f"{ROBLOX_GROUPS_BASE}/v1/groups/{self.group_id}/users/{user_id}"
         await self._request("PATCH", url, json={"roleId": role_id})
 
+    async def list_datastore_entries(
+        self,
+        universe_id: int,
+        datastore_name: str,
+        *,
+        scope: str = "global",
+        prefix: Optional[str] = None,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        url = (
+            f"{ROBLOX_API_BASE}/datastores/v1/universes/{universe_id}/standard-datastores/datastore/entries"
+        )
+        params: Dict[str, Any] = {
+            "datastoreName": datastore_name,
+            "scope": scope,
+        }
+        if prefix:
+            params["prefix"] = prefix
+        if limit is not None:
+            params["limit"] = limit
+        if cursor:
+            params["cursor"] = cursor
+
+        return await self._request("GET", url, params=params)
+
+    async def read_datastore_entry(
+        self,
+        universe_id: int,
+        datastore_name: str,
+        *,
+        key: str,
+        scope: str = "global",
+    ) -> Dict[str, Any]:
+        url = (
+            f"{ROBLOX_API_BASE}/datastores/v1/universes/{universe_id}/standard-datastores/datastore/entries/entry"
+        )
+        params = {
+            "datastoreName": datastore_name,
+            "scope": scope,
+            "entryKey": key,
+        }
+        return await self._request("GET", url, params=params)
+
     async def write_datastore(self, universe_id: int, datastore_name: str, scope: str, key: str, value: Dict[str, Any]) -> None:
         url = (
             f"{ROBLOX_API_BASE}/datastores/v1/universes/{universe_id}/standard-datastores/datastore/entries/entry"

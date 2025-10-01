@@ -124,6 +124,18 @@ class LeaderboardRecordsResponse(BaseModel):
     wos: list[LeaderboardRecord]
 
 
+class RobloxSyncRequest(BaseModel):
+    activity: Literal["leaderboard"]
+    limit: int = Field(100, ge=1, le=500)
+    cursor: Optional[str] = None
+
+
+class RobloxSyncResponse(BaseModel):
+    updated: int
+    created: int
+    next_cursor: Optional[str] = Field(None, alias="nextCursor")
+
+
 __all__ = [
     "AutomationAction",
     "AutomationDecision",
@@ -139,4 +151,6 @@ __all__ = [
     "LeaderboardTopResponse",
     "LeaderboardRecord",
     "LeaderboardRecordsResponse",
+    "RobloxSyncRequest",
+    "RobloxSyncResponse",
 ]
