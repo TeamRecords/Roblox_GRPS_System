@@ -4,98 +4,119 @@
       "level": "N/A",
       "ignored": true
     },
+    "Suspended": {
+      "level": "Trial",
+      "canEarn": false,
+      "locked": true
+    },
     "Initiate": {
       "level": "LR",
       "canEarn": true
     },
-    "Suspended": {
-      "level": "L&M",
-      "canEarn": false
-    },
     "Shock Trooper I": {
-      "level": "LR"
+      "level": "LR",
+      "canEarn": true
     },
     "Shock Trooper II": {
-      "level": "LR"
+      "level": "LR",
+      "canEarn": true
     },
     "Volt Specialist I": {
-      "level": "LR"
+      "level": "LR",
+      "canEarn": true
     },
     "Volt Specialist II": {
       "level": "MR",
-      "canWarn": true
+      "canEarn": true
     },
     "Storm Corporal I": {
       "level": "MR",
-      "canWarn": true
+      "canEarn": true
     },
     "Storm Corporal II": {
       "level": "MR",
-      "canWarn": true
+      "canEarn": true
     },
     "Thunder Sergeant I": {
       "level": "MR",
-      "canWarn": true
+      "canEarn": true
     },
     "Thunder Sergeant II": {
       "level": "MR",
-      "canWarn": true
+      "canEarn": true
     },
     "Arc Lieutenant I": {
       "level": "MR",
-      "canWarn": true
+      "canEarn": true
     },
     "Arc Lieutenant II": {
       "level": "MR",
-      "canWarn": true
+      "canEarn": true
     },
     "Captain I": {
       "level": "D&I",
-      "canWarn": true
+      "canEarn": true
     },
     "Captain II": {
       "level": "D&I",
-      "canWarn": true
-    },
-    "Ambassador": {
-      "level": "CMD",
-      "canWarn": true,
-      "adjustLimit": 25
+      "canEarn": true
     },
     "Envoy": {
       "level": "CMD",
       "canWarn": true,
-      "adjustLimit": 25
+      "canAdjust": true
+    },
+    "Ambassador": {
+      "level": "CMD",
+      "canWarn": true,
+      "canAdjust": true
     },
     "Tempest Major": {
       "level": "CMD",
       "canWarn": true,
-      "canBan": false,
-      "adjustLimit": 25
+      "canAdjust": true
     },
     "Electro Colonel": {
       "level": "CMD",
       "canWarn": true,
-      "canBan": true,
-      "adjustLimit": 25
+      "canAdjust": true,
+      "canBan": true
     },
     "Brigadier General": {
       "level": "CCM",
       "canWarn": true,
-      "canBan": true,
-      "adjustLimit": 25
+      "canAdjust": true,
+      "canBan": true
     },
     "Stormmarshal": {
       "level": "CCM",
       "canWarn": true,
-      "canBan": true,
-      "adjustLimit": 25
+      "canAdjust": true,
+      "canBan": true
+    },
+    "Supreme Admirals": {
+      "level": "CCM",
+      "canWarn": true,
+      "canAdjust": true,
+      "canBan": true
+    },
+    "Supreme Command": {
+      "level": "LDR",
+      "canWarn": true,
+      "canAdjust": true,
+      "canBan": true
+    },
+    "Supreme Council": {
+      "level": "LDR",
+      "canWarn": true,
+      "canAdjust": true,
+      "canBan": true
     },
     "Imperator": {
       "level": "LDR",
       "canWarn": true,
-      "canBan": true,
-      "adjustLimit": 25
+      "canAdjust": true,
+      "canBan": true
     }
   }
 }

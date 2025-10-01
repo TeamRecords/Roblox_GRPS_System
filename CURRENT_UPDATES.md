@@ -1,10 +1,10 @@
 # Current Updates & 2025 Deployment Playbook
 
 ## Snapshot — March 2025
-- **GRPS Core**: Lua modules for policy, points, ranks, permissions, punishments, audit, and datastore remain source-of-truth for in-game automation.
+- **GRPS Core**: Python FastAPI service in `backend/app` now owns rank calculations, punishments, datastore synchronisation, and automation decisions. Roblox code is reduced to a lightweight HTTP bridge.
 - **Web Portal**: Next.js 15 + Prisma scaffold (see `/web-project`) prepared for Neon Postgres or self-hosted Postgres.
-- **Automation Back-End**: New Python FastAPI service blueprint (`backend/automation.md`) orchestrates sync jobs, audit mirroring, and webhook delivery.
-- **Open Cloud Sync**: Roblox Creator Hub Open Cloud adapter (`src/roblox/server/open_cloud.lua`) keeps Data Store snapshots in lockstep with the in-game GRPS records.
+- **Automation Back-End**: FastAPI implementation exposes `/roblox/events/player-activity`, `/players/:id`, and `/automation/decisions` with Prisma/Neon ready SQLAlchemy models.
+- **Open Cloud Sync**: Roblox Creator Hub Open Cloud integration handled by `backend/app/services/roblox_client.py`; Roblox scripts forward snapshots through REST instead of writing DataStores directly.
 - **Integration Config**: `/config/backend.integrations.json` centralises service endpoints, secrets, and feature toggles for all runtimes.
 
 ## 2025 Full Setup Checklist
