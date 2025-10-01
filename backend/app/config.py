@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     inbound_api_keys: List[str] = Field(default_factory=list, alias="INBOUND_API_KEYS")
     config_dir: Path = Field(Path(__file__).resolve().parents[2] / "config", alias="CONFIG_DIR")
     allowed_origins: List[str] = Field(default_factory=list, alias="ALLOWED_ORIGINS")
+    api_host: str = Field("127.0.0.1", alias="API_HOST")
+    api_port: int = Field(8080, alias="API_PORT")
+    auto_reload: bool = Field(True, alias="API_AUTO_RELOAD")
 
     class Config:
         env_file = ".env"
