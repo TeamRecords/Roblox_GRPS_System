@@ -1,9 +1,9 @@
 # LEGAL.md
 
 ## Copyright Notice
-© 2025 [Your Name or Alias]. All Rights Reserved.
+© 2025 TeamRecords. All Rights Reserved.
 
-This repository, including but not limited to the **GRPS System** and all related source code, assets, documentation, and files contained herein, is the exclusive intellectual property of **[Your Name or Alias]** ("the Owner").
+This repository, including but not limited to the **GRPS System** and all related source code, assets, documentation, and files contained herein, is the exclusive intellectual property of **TeamRecords** ("the Owner").
 
 ## Restrictions on Use
 1. **No License Granted**:  
@@ -23,4 +23,4 @@ This repository, including but not limited to the **GRPS System** and all relate
 Unauthorized use, reproduction, or distribution of this repository and its contents will be pursued to the fullest extent of the law, including civil and criminal penalties.  
 
 For permission requests, please contact:  
-**[Your Contact Information or GitHub Profile Link]**
+**TeamRecords | https://github.com/TeamRecords**
