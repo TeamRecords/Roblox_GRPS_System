@@ -1,7 +1,7 @@
 const DEFAULT_BASE_URL =
   process.env.GRPS_AUTOMATION_BASE_URL ??
   process.env.NEXT_PUBLIC_AUTOMATION_BASE_URL ??
-  'http://localhost:8000'
+  'https://automation.arcfoundation.net'
 
 export type SyncResponse = {
   updated: number

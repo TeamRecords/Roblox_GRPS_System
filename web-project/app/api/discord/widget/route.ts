@@ -1,8 +1,19 @@
 import { NextResponse } from 'next/server'
 
 const DISCORD_WIDGET_URL = 'https://discord.com/api/guilds/1402976697044832276/widget.json'
+const SKIP_WIDGET_FETCH =
+  process.env.SKIP_EXTERNAL_FETCH === 'true' || process.env.CI === '1' || process.env.NEXT_RUNTIME === 'edge'
 
 export async function GET() {
+  if (SKIP_WIDGET_FETCH) {
+    return NextResponse.json({
+      id: '1402976697044832276',
+      name: 'GRPS Command',
+      presenceCount: 0,
+      instantInvite: 'https://discord.gg/cXKEdAKdWv'
+    })
+  }
+
   try {
     const response = await fetch(DISCORD_WIDGET_URL, {
       next: { revalidate: 300 },

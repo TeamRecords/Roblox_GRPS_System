@@ -11,7 +11,7 @@ export default function PrivacyPolicyPage() {
           Privacy Policy
         </h2>
         <p className="text-zinc-400">
-          This Privacy Policy explains how the Roblox GRPS leaderboard ("we", "our") collects, stores, and protects data
+          This Privacy Policy explains how the Roblox GRPS leaderboard (&ldquo;we&rdquo;, &ldquo;our&rdquo;) collects, stores, and protects data
           when you interact with the Service.
         </p>
       </header>

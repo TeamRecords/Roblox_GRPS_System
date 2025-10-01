@@ -4,7 +4,8 @@ The Roblox GRPS automation stack now lives in `backend/app`. The service is a
 Python 3.13 FastAPI application that receives telemetry from Roblox experiences,
 calculates rank changes, persists player state to Neon Postgres, and invokes
 Roblox Open Cloud APIs for automated promotions, demotions, suspensions, and
-bans.
+bans. Its public-facing data contract is exposed through the Next.js automation
+API (`/automatic-web-project`, https://automation.arcfoundation.net).
 
 ## Runtime Overview
 

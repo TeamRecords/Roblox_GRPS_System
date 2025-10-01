@@ -1,6 +1,8 @@
 import Link from 'next/link'
 
 const DISCORD_WIDGET_URL = 'https://discord.com/api/guilds/1402976697044832276/widget.json'
+const SKIP_WIDGET_FETCH =
+  process.env.SKIP_EXTERNAL_FETCH === 'true' || process.env.CI === '1' || process.env.NEXT_RUNTIME === 'edge'
 
 export type DiscordWidget = {
   id: string
@@ -11,6 +13,10 @@ export type DiscordWidget = {
 }
 
 async function loadDiscordWidget(): Promise<DiscordWidget | null> {
+  if (SKIP_WIDGET_FETCH) {
+    return null
+  }
+
   try {
     const response = await fetch(DISCORD_WIDGET_URL, {
       next: { revalidate: 300 },
