@@ -5,7 +5,7 @@
 This is the master contract/spec for GRPS. If other docs conflict, INFO.md wins.
 
 ## Key Points
-- Rank progression via policy JSON; server-authoritative writes.
+- Rank progression via policy JSON; Python FastAPI backend performs authoritative writes.
 - Warning thresholds: ≥4 → Suspended (Punishment_Trial, up to 14 days), ≥7 → Ban (Punishment_Severe).
 - Guest is ignored by GRPS (no points/promotions/penalties).
 - Read-only public API powering website at rle.arcfoundation.net.
