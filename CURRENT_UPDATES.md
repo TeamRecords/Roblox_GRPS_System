@@ -24,7 +24,7 @@
 
 ### 3. Python Automation Service (FastAPI)
 1. Review and materialise the reference implementation in `backend/automation.md` as `backend/service.py`.
-2. Create a Python 3.12 environment (uv v0.4+, poetry 1.8+, or pip-tools) and install dependencies listed in the markdown (`fastapi`, `httpx`, `pydantic`, `sqlalchemy[asyncio]`, `asyncpg`, `python-dotenv`, `redis` optional).
+2. Create a Python 3.13 environment (uv v0.4+, poetry 1.8+, or pip-tools) and install dependencies listed in the markdown (`fastapi`, `httpx`, `pydantic`, `sqlalchemy[asyncio]`, `asyncpg`, `python-dotenv`, `redis` optional).
 3. Run initial migrations using Alembic (template commands provided) to create `players`, `audits`, and `sync_jobs` tables.
 4. Register service secrets in `.env` (examples below) and confirm FastAPI boots via `uvicorn backend.service:app --reload`.
 

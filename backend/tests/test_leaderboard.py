@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import pytest
+import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from backend.app.models import Base, Player
 from backend.app.services.leaderboard import LeaderboardService
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def session() -> AsyncSession:
     engine = create_async_engine("sqlite+aiosqlite:///:memory:")
     async with engine.begin() as connection:

@@ -25,7 +25,7 @@ class Player(Base):
     punishment_status = Column(String(64), nullable=True)
     punishment_expires_at = Column(DateTime, nullable=True)
     privileged = Column(Boolean, nullable=False, default=False)
-    metadata = Column(JSON, nullable=True)
+    metadata_payload = Column("metadata", JSON, nullable=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     last_synced_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)

@@ -32,22 +32,27 @@ function automationBaseUrl(): string | null {
   return process.env.NEXT_PUBLIC_AUTOMATION_BASE_URL ?? process.env.GRPS_AUTOMATION_BASE_URL ?? null
 }
 
-async function fetchFromAutomation<T>(path: string): Promise<T> {
+async function fetchAutomationPayload<T>(path: string): Promise<T | undefined> {
   const baseUrl = automationBaseUrl()
   if (!baseUrl) {
-    throw new Error('Automation base URL not configured')
+    return undefined
   }
 
-  const response = await fetch(`${baseUrl}${path}`, {
-    cache: 'no-store',
-    headers: { 'accept': 'application/json' }
-  })
+  try {
+    const response = await fetch(`${baseUrl}${path}`, {
+      cache: 'no-store',
+      headers: { accept: 'application/json' }
+    })
 
-  if (!response.ok) {
-    throw new Error(`Automation request failed (${response.status})`)
+    if (!response.ok) {
+      throw new Error(`automation request failed (${response.status})`)
+    }
+
+    return (await response.json()) as T
+  } catch (error) {
+    console.error('Failed to fetch automation payload', { path, error })
+    return undefined
   }
-
-  return (await response.json()) as T
 }
 
 export type LeaderboardPlayer = {
@@ -65,39 +70,14 @@ export type LeaderboardRecords = {
   wos: Array<{ userId: number; username: string; wos: number | null }>
 }
 
-const FALLBACK_PLAYERS: LeaderboardPlayer[] = Array.from({ length: 30 }).map((_, index) => ({
-  userId: 8000 + index,
-  username: `Phantom${index + 1}`,
-  rank: 'Classified Operative',
-  points: 5000 - index * 120,
-  kos: 900 - index * 9,
-  wos: 210 + index * 4,
-  updatedAt: null
-}))
-
-const FALLBACK_RECORDS: LeaderboardRecords = {
-  kos: [
-    { userId: 8101, username: 'Abyss', kos: 1245 },
-    { userId: 8102, username: 'Spectre', kos: 1187 },
-    { userId: 8103, username: 'Cipher', kos: 1112 },
-    { userId: 8104, username: 'Harrier', kos: 1068 },
-    { userId: 8105, username: 'Revenant', kos: 1001 }
-  ],
-  wos: [
-    { userId: 8201, username: 'Viper', wos: 972 },
-    { userId: 8202, username: 'Obsidian', wos: 945 },
-    { userId: 8203, username: 'Nocturne', wos: 902 },
-    { userId: 8204, username: 'Drakon', wos: 876 },
-    { userId: 8205, username: 'Helix', wos: 860 }
-  ]
-}
-
 export async function fetchTopPlayers(limit = 30): Promise<LeaderboardPlayer[]> {
-  try {
-    const params = new URLSearchParams({ limit: String(limit) })
-    const payload = await fetchFromAutomation<LeaderboardTopResponse>(`/leaderboard/top?${params.toString()}`)
+  const params = new URLSearchParams({ limit: String(limit) })
+  const automationPayload = await fetchAutomationPayload<LeaderboardTopResponse>(
+    `/leaderboard/top?${params.toString()}`
+  )
 
-    return payload.players.map((player) => ({
+  if (automationPayload) {
+    return automationPayload.players.map((player) => ({
       userId: player.userId,
       username: player.username,
       rank: player.rank ?? null,
@@ -106,8 +86,6 @@ export async function fetchTopPlayers(limit = 30): Promise<LeaderboardPlayer[]> 
       wos: player.wos ?? null,
       updatedAt: player.lastSyncedAt ? new Date(player.lastSyncedAt) : null
     }))
-  } catch (error) {
-    console.error('Falling back to Prisma leaderboard payload', error)
   }
 
   try {
@@ -129,30 +107,30 @@ export async function fetchTopPlayers(limit = 30): Promise<LeaderboardPlayer[]> 
       updatedAt: player.updatedAt
     }))
   } catch (error) {
-    console.error('Falling back to static leaderboard payload', error)
-    return FALLBACK_PLAYERS.slice(0, limit)
+    console.error('Failed to fetch leaderboard payload from Prisma', error)
+    return []
   }
 }
 
 export async function fetchRecordHolders(limit = 5): Promise<LeaderboardRecords> {
-  try {
-    const params = new URLSearchParams({ limit: String(limit) })
-    const payload = await fetchFromAutomation<LeaderboardRecordsResponse>(`/leaderboard/records?${params.toString()}`)
+  const params = new URLSearchParams({ limit: String(limit) })
+  const automationPayload = await fetchAutomationPayload<LeaderboardRecordsResponse>(
+    `/leaderboard/records?${params.toString()}`
+  )
 
+  if (automationPayload) {
     return {
-      kos: payload.kos.map((entry) => ({
+      kos: automationPayload.kos.map((entry) => ({
         userId: entry.userId,
         username: entry.username,
         kos: entry.kos ?? null
       })),
-      wos: payload.wos.map((entry) => ({
+      wos: automationPayload.wos.map((entry) => ({
         userId: entry.userId,
         username: entry.username,
         wos: entry.wos ?? null
       }))
     }
-  } catch (error) {
-    console.error('Falling back to Prisma record payload', error)
   }
 
   try {
@@ -180,7 +158,7 @@ export async function fetchRecordHolders(limit = 5): Promise<LeaderboardRecords>
       }))
     }
   } catch (error) {
-    console.error('Falling back to static record payload', error)
-    return FALLBACK_RECORDS
+    console.error('Failed to fetch leaderboard records from Prisma', error)
+    return { kos: [], wos: [] }
   }
 }
