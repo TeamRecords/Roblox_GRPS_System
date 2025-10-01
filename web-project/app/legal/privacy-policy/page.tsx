@@ -4,72 +4,71 @@ export const metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <article className="space-y-8 text-sm leading-relaxed text-slate-200">
+    <article className="space-y-8 text-sm leading-relaxed text-zinc-200">
       <header className="space-y-3">
-        <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Updated March 2024</p>
-        <h2 className="text-3xl font-semibold text-white">Privacy Policy</h2>
-        <p className="text-slate-300">
-          This Privacy Policy explains how the Roblox GRPS leaderboard ("we", "our", "us") collects, uses, and shares data
-          related to your participation in the leaderboard experience.
+        <p className="text-xs uppercase tracking-[0.3em] text-zinc-500">Updated March 2024</p>
+        <h2 className="text-3xl font-semibold text-yellow-100" data-signal>
+          Privacy Policy
+        </h2>
+        <p className="text-zinc-400">
+          This Privacy Policy explains how the Roblox GRPS leaderboard ("we", "our") collects, stores, and protects data
+          when you interact with the Service.
         </p>
       </header>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">1. Data We Collect</h3>
+        <h3 className="text-lg font-semibold text-yellow-100">Data We Collect</h3>
         <p>
-          We collect leaderboard-specific data provided through Roblox services, including your Roblox username, user ID,
-          rank, points, knockouts, wipeouts, and relevant timestamps. We do not collect passwords or sensitive personal data
-          from your Roblox account.
+          We synchronise Roblox usernames, user IDs, ranks, points, knockouts, wipeouts, and timestamps associated with
+          leaderboard activity. Optional Discord handles submitted through support forms may also be stored.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">2. How We Use Data</h3>
+        <h3 className="text-lg font-semibold text-yellow-100">How Data Is Used</h3>
         <p>
-          Your statistics are used to calculate standings, display record holders, and maintain historical performance. We may
-          analyze aggregated data to improve matchmaking, detect suspicious activity, and provide insights to the GRPS
-          community.
+          Data fuels leaderboard standings, record tracking, and moderation investigations. Aggregated snapshots are retained
+          to detect anomalies, verify reports, and provide historical analytics to administrators.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">3. Data Sharing</h3>
+        <h3 className="text-lg font-semibold text-yellow-100">Data Sharing</h3>
         <p>
-          Leaderboard data is publicly viewable within the GRPS experience and associated web properties. We do not sell or
-          rent data to third parties. We may share data with Roblox Corporation or platform partners if required to enforce
-          policy compliance or respond to legal requests.
+          We do not sell player data. Limited details may be shared with trusted Roblox developers or Discord moderators to
+          resolve disputes, enforce rules, or comply with legal requirements.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">4. Retention &amp; Security</h3>
+        <h3 className="text-lg font-semibold text-yellow-100">Security</h3>
         <p>
-          Data is retained as long as necessary to operate the leaderboard or fulfill regulatory obligations. We implement
-          safeguards such as access controls and monitoring to protect leaderboard data from unauthorized use.
+          Leaderstats and snapshots are stored in secure Postgres Neon databases. Access is restricted and logged. Data in
+          transit is encrypted via HTTPS, and Discord webhooks are processed server-side to protect tokens.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">5. Your Choices</h3>
+        <h3 className="text-lg font-semibold text-yellow-100">Retention</h3>
         <p>
-          If you wish to have your data removed from public display, contact the GRPS moderation team. Removal requests are
-          handled in accordance with Roblox policies and may require verification of account ownership.
+          We retain leaderboard entries as long as the Roblox experience remains active. Archived snapshots may be retained
+          for auditing and anti-cheat reviews, after which they are deleted or anonymised.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">6. Children&apos;s Privacy</h3>
+        <h3 className="text-lg font-semibold text-yellow-100">Your Rights</h3>
         <p>
-          The leaderboard follows Roblox community standards designed to protect younger audiences. We do not knowingly
-          collect additional personal information from children under 13 beyond what Roblox provides through platform APIs.
+          Players may request corrections or removal of incorrect leaderstats via the official Discord server or Roblox
+          support channels. We may require verification before fulfilling sensitive requests.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">Contact</h3>
+        <h3 className="text-lg font-semibold text-yellow-100">Contact</h3>
         <p>
-          Privacy questions can be directed to the GRPS moderation team via our official Discord server or through the
-          support contact listed in the Roblox experience description.
+          Contact the GRPS privacy lead through our Discord relay or by using the communication methods listed in the Roblox
+          experience description.
         </p>
       </section>
     </article>

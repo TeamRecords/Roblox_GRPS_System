@@ -1,31 +1,42 @@
 import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/db'
 
-type PlayerRouteContext = {
+interface PlayerRouteContext {
   params: Promise<Record<string, string | string[] | undefined>>
 }
 
 export async function GET(_: NextRequest, { params }: PlayerRouteContext) {
   const resolvedParams = await params
   const rawUserId = resolvedParams.userId
-  const userId = Array.isArray(rawUserId)
-    ? rawUserId[0] ?? ''
-    : rawUserId ?? ''
+  const userIdValue = Array.isArray(rawUserId) ? rawUserId[0] : rawUserId
+  const userId = Number.parseInt(userIdValue ?? '', 10)
 
-  const data = {
-    userId,
-    username: `User${userId}`,
-    rank: 'Thunder Sergeant II',
-    points: 3450,
-    kos: 420,
-    wos: 220,
-    history: [
-      { date: '2025-09-01', change: +25, reason: 'Operation' },
-      { date: '2025-09-02', change: +15, reason: 'Training' },
-      { date: '2025-09-05', change: -2, reason: 'WO' }
-    ]
+  if (!Number.isSafeInteger(userId)) {
+    return NextResponse.json({ error: 'Invalid player id supplied.' }, { status: 400 })
   }
 
-  return new Response(JSON.stringify(data), {
-    headers: { 'content-type': 'application/json' }
-  })
+  try {
+    const player = await prisma.player.findUnique({
+      where: { userId }
+    })
+
+    if (!player) {
+      return NextResponse.json({ error: 'Player not found.' }, { status: 404 })
+    }
+
+    return NextResponse.json({
+      userId: player.userId,
+      username: player.username,
+      rank: player.rank ?? null,
+      points: player.points ?? null,
+      kos: player.kos ?? null,
+      wos: player.wos ?? null,
+      updatedAt: player.updatedAt,
+      history: []
+    })
+  } catch (error) {
+    console.error('Failed to query player', error)
+    return NextResponse.json({ error: 'Unable to load player profile.' }, { status: 500 })
+  }
 }
