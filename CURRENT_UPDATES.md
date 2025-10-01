@@ -4,6 +4,7 @@
 - **GRPS Core**: Lua modules for policy, points, ranks, permissions, punishments, audit, and datastore remain source-of-truth for in-game automation.
 - **Web Portal**: Next.js 15 + Prisma scaffold (see `/web-project`) prepared for Neon Postgres or self-hosted Postgres.
 - **Automation Back-End**: New Python FastAPI service blueprint (`backend/automation.md`) orchestrates sync jobs, audit mirroring, and webhook delivery.
+- **Open Cloud Sync**: Roblox Creator Hub Open Cloud adapter (`src/roblox/server/open_cloud.lua`) keeps Data Store snapshots in lockstep with the in-game GRPS records.
 - **Integration Config**: `/config/backend.integrations.json` centralises service endpoints, secrets, and feature toggles for all runtimes.
 
 ## 2025 Full Setup Checklist
@@ -17,7 +18,8 @@
 1. Import the `/src/roblox` modules into Roblox Studio via Rojo or the new Roblox CLI.
 2. Place `server` modules under `ServerScriptService/GRPS` and `shared` modules under `ReplicatedStorage/GRPSShared`.
 3. Configure `DataStoreService` API access level to `Open Cloud` for automation and ensure ordered datastore is enabled for leaderboards.
-4. Grant the automation service's API key permission to read/write GRPS datastore via Roblox Open Cloud.
+4. Configure the new Open Cloud adapter with the API key, universe ID, datastore name, and scope (see `config/backend.integrations.json`).
+5. Grant the automation service's API key permission to read/write the GRPS datastore via Roblox Open Cloud.
 
 ### 3. Python Automation Service (FastAPI)
 1. Review and materialise the reference implementation in `backend/automation.md` as `backend/service.py`.
@@ -29,6 +31,9 @@
 DATABASE_URL=postgresql+asyncpg://grps_bot:change-me@127.0.0.1:5432/grps
 ROBLOX_OPEN_CLOUD_API_KEY=rbx-oc-...
 ROBLOX_UNIVERSE_ID=000000000
+ROBLOX_DATASTORE_NAME=GRPS_Points
+ROBLOX_DATASTORE_SCOPE=global
+ROBLOX_DATASTORE_PREFIX=player:
 WEBHOOK_VERIFICATION_KEY=base64-hmac-secret
 TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
 AUTOMATION_SIGNATURE_SECRET=hmac-shared-secret

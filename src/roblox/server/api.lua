@@ -14,6 +14,7 @@ local Punishments = require(script.Parent.punishments)
 local Commands = require(script.Parent.commands)
 local Audit = require(script.Parent.audit)
 local DataStore = require(script.Parent.datastore)
+local OpenCloud = require(script.Parent.open_cloud)
 
 local Api = {}
 Api.__index = Api
@@ -77,6 +78,11 @@ function Api.new(options)
     end,
   })
 
+  local openCloudAdapter = options.openCloud
+  if not openCloudAdapter and options.openCloudOptions then
+    openCloudAdapter = OpenCloud.new(options.openCloudOptions)
+  end
+
   local instance = setmetatable({}, Api)
   instance._policy = policy
   instance._store = dataStore
@@ -86,6 +92,8 @@ function Api.new(options)
   instance._commands = commands
   instance._clock = clock
   instance._historyLimit = options.historyLimit
+  instance._openCloud = openCloudAdapter
+  instance._openCloudLogSuccess = options.openCloudLogSuccess == true
   return instance
 end
 
@@ -104,6 +112,50 @@ end
 function Api:_applyHistory(record, entry)
   record.history = record.history or {}
   table.insert(record.history, entry)
+end
+
+function Api:_syncOpenCloud(record, context)
+  if not self._openCloud or not record then
+    return
+  end
+
+  context = context or {}
+  local ok, success, payloadOrError, response = pcall(function()
+    return self._openCloud:writePlayerSnapshot(record, { now = context.now, matchVersion = context.matchVersion })
+  end)
+
+  local auditPayload = {
+    action = "OPEN_CLOUD_SYNC",
+    userId = record.userId,
+    source = context.source,
+    success = false,
+  }
+
+  if not ok then
+    auditPayload.error = tostring(success)
+    self._audit:log(auditPayload)
+    return
+  end
+
+  auditPayload.success = success == true
+  if auditPayload.success then
+    if response and type(response) == "table" then
+      auditPayload.status = response.StatusCode
+      if response.Headers then
+        auditPayload.version = response.Headers["roblox-entry-version"]
+      end
+    end
+    if not (context.logSuccess or self._openCloudLogSuccess) then
+      return
+    end
+  else
+    auditPayload.error = payloadOrError
+    if response and type(response) == "table" then
+      auditPayload.status = response.StatusCode or response.StatusMessage
+    end
+  end
+
+  self._audit:log(auditPayload)
 end
 
 function Api:_buildContext(record, now, payload)
@@ -138,7 +190,9 @@ function Api:recordEvent(actor, payload)
   local targetUserId = payload.userId
   local actorIdentifier = actorId(actor)
 
-  local _, result = self._store:updatePlayer(targetUserId, function(record)
+  local updatedRecord
+  local result
+  updatedRecord, result = self._store:updatePlayer(targetUserId, function(record)
     if payload.username then
       record.username = payload.username
     end
@@ -216,6 +270,11 @@ function Api:recordEvent(actor, payload)
     return false, result and result.reason or "UNKNOWN"
   end
 
+  self:_syncOpenCloud(updatedRecord, {
+    source = "POINT_EVENT",
+    now = now,
+  })
+
   return true, result
 end
 
@@ -224,9 +283,10 @@ function Api:warn(actor, targetUserId, reason)
 
   local now = self:_now()
   local actorIdentifier = actorId(actor)
+  local updatedRecord
 
   if success then
-    self._store:updatePlayer(targetUserId, function(record)
+    updatedRecord = select(1, self._store:updatePlayer(targetUserId, function(record)
       record.warns = payload.count
       local entry = {
         at = now,
@@ -237,7 +297,7 @@ function Api:warn(actor, targetUserId, reason)
       }
       self:_applyHistory(record, entry)
       return record
-    end, { now = now })
+    end, { now = now }))
   end
 
   self._audit:log({
@@ -248,6 +308,13 @@ function Api:warn(actor, targetUserId, reason)
     success = success,
     status = payload and payload.status,
   })
+
+  if success then
+    self:_syncOpenCloud(updatedRecord, {
+      source = "WARN_COMMAND",
+      now = now,
+    })
+  end
 
   return success, payload
 end
