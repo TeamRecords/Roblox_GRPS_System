@@ -11,7 +11,7 @@ export default function TermsOfServicePage() {
           Terms of Service
         </h2>
         <p className="text-zinc-400">
-          These Terms of Service ("Terms") govern your access to and use of the Roblox GRPS leaderboard (the "Service").
+          These Terms of Service (&ldquo;Terms&rdquo;) govern your access to and use of the Roblox GRPS leaderboard (the &ldquo;Service&rdquo;).
           By accessing or interacting with the Service you agree to be bound by these Terms.
         </p>
       </header>
@@ -55,7 +55,7 @@ export default function TermsOfServicePage() {
       <section className="space-y-3">
         <h3 className="text-lg font-semibold text-yellow-100">5. Limitation of Liability</h3>
         <p>
-          The Service is provided on an "as is" basis. To the fullest extent permitted by law, GRPS and its collaborators
+          The Service is provided on an &ldquo;as is&rdquo; basis. To the fullest extent permitted by law, GRPS and its collaborators
           disclaim liability for any indirect, incidental, or consequential damages arising from use of the leaderboard.
         </p>
       </section>

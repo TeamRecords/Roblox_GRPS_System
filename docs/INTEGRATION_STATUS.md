@@ -12,8 +12,9 @@ This revision captures the wiring introduced in the current change-set so platfo
 - Failures are logged but do not halt automation, keeping the backend resilient when the Open Cloud API is temporarily unavailable.
 
 ## Web Portal → Automation Data
-- The Next.js leaderboard still reads from Prisma, but IDs returned as `BigInt` are normalised to safe JavaScript numbers.
-- If Prisma connectivity fails the original fallback payload is used, so the web UI remains operational during maintenance windows.
+- `/web-project` now fetches from https://automation.arcfoundation.net (`/automatic-web-project`) by default while preserving Prisma fallbacks.
+- IDs returned as `BigInt` are normalised to safe JavaScript numbers before hydrating React components.
+- If Prisma connectivity fails the automation payload keeps the UI operational during maintenance windows.
 
 ## Environment Contracts
 - Populate `.env` / `.env.local` with matching connection strings:

@@ -1,5 +1,8 @@
 import { fetchRecordHolders, fetchTopPlayers, type LeaderboardPlayer } from '@/lib/leaderboard'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 function formatNumber(value: number | null | undefined) {
   if (value === null || value === undefined) {
     return '—'

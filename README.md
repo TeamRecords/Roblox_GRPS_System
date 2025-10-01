@@ -7,4 +7,5 @@ Unified, Codex-ready package containing:
 - /src Roblox LuaU bridge modules + tests
 - /backend/app FastAPI automation service (Python 3.13)
 - /docs rank_chart.svg
-- /web-project (Next.js 15 + Tailwind + TS + ESLint + Prisma (Neon) + Turnstile) ready for Vercel
+- /automatic-web-project (Next.js 15 automation API powering https://automation.arcfoundation.net)
+- /web-project (Next.js 15 + Tailwind + TS + ESLint + Prisma + Turnstile) ready for Vercel

@@ -1,9 +1,9 @@
 # Current Updates & 2025 Deployment Playbook
 
-## Snapshot — March 2025
-- **GRPS Core**: Python FastAPI service in `backend/app` now owns rank calculations, punishments, datastore synchronisation, and automation decisions. Roblox code is reduced to a lightweight HTTP bridge.
-- **Web Portal**: Next.js 15 + Prisma scaffold (see `/web-project`) prepared for Neon Postgres or self-hosted Postgres.
-- **Automation Back-End**: FastAPI implementation exposes `/roblox/events/player-activity`, `/players/:id`, and `/automation/decisions` with Prisma/Neon ready SQLAlchemy models.
+## Snapshot — October 2025
+- **Automation API Split**: `/automatic-web-project` now hosts the production Next.js API deployed to https://automation.arcfoundation.net. It shares the Prisma schema with the public portal and validates sync signatures.
+- **Public Portal Refresh**: `/web-project` consumes the live automation endpoints and exposes `/api/leaderboard/refresh` for scheduled syncs. Default domain is https://rle.arcfoundation.net.
+- **FastAPI Authority**: Python automation in `backend/app` still performs authoritative rank calculations, Roblox Open Cloud writes, and webhook dispatching.
 - **Open Cloud Sync**: Roblox Creator Hub Open Cloud integration handled by `backend/app/services/roblox_client.py`; Roblox scripts forward snapshots through REST instead of writing DataStores directly.
 - **Integration Config**: `/config/backend.integrations.json` centralises service endpoints, secrets, and feature toggles for all runtimes.
 
@@ -26,19 +26,7 @@
 1. Review and materialise the reference implementation in `backend/automation.md` as `backend/service.py`.
 2. Create a Python 3.13 environment (uv v0.4+, poetry 1.8+, or pip-tools) and install dependencies listed in the markdown (`fastapi`, `httpx`, `pydantic`, `sqlalchemy[asyncio]`, `asyncpg`, `python-dotenv`, `redis` optional).
 3. Run initial migrations using Alembic (template commands provided) to create `players`, `audits`, and `sync_jobs` tables.
-4. Register service secrets in `.env` (examples below) and confirm FastAPI boots via `uvicorn backend.service:app --reload`.
-
-```env
-DATABASE_URL=postgresql+asyncpg://grps_bot:change-me@127.0.0.1:5432/grps
-ROBLOX_OPEN_CLOUD_API_KEY=rbx-oc-...
-ROBLOX_UNIVERSE_ID=000000000
-ROBLOX_DATASTORE_NAME=GRPS_Points
-ROBLOX_DATASTORE_SCOPE=global
-ROBLOX_DATASTORE_PREFIX=player:
-WEBHOOK_VERIFICATION_KEY=base64-hmac-secret
-TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
-AUTOMATION_SIGNATURE_SECRET=hmac-shared-secret
-```
+4. Register service secrets in `.env` (examples in `.env.example`) and confirm FastAPI boots via `uvicorn app.main:app --reload`.
 
 ### 4. Database Provisioning
 1. Provision a Postgres 15+ instance (Neon, Supabase, Railway, or self-hosted) with logical replication enabled if you plan to mirror to analytics.
@@ -47,11 +35,16 @@ AUTOMATION_SIGNATURE_SECRET=hmac-shared-secret
 4. If analytics warehousing is required, configure CDC to BigQuery/Snowflake via Fivetran and register read-only credentials in `backend.integrations.json`.
 
 ### 5. Web Portal Bring-Up
-1. Populate `/web-project/.env.local` with `DATABASE_URL`, `NEXT_PUBLIC_AUTOMATION_BASE_URL`, and `TURNSTILE_SITE_KEY`.
-2. Run `npm install` and `npm run dev` to verify the leaderboard fetches from Prisma and falls back gracefully if automation is offline.
-3. Deploy to Vercel (or another platform) with environment variables set and [Prisma Data Proxy](https://www.prisma.io/docs/data-platform/data-proxy) enabled for serverless cold-start mitigation.
+1. Populate `/web-project/.env.local` with `DATABASE_URL`, `NEXT_PUBLIC_AUTOMATION_BASE_URL=https://automation.arcfoundation.net`, and `TURNSTILE_SITE_KEY`.
+2. Run `npm install`, `npm run lint`, and `npm run dev` to verify the leaderboard fetches from Prisma and the automation API.
+3. Deploy to Vercel (or another platform) with environment variables set and Prisma Data Proxy enabled if needed for serverless cold-start mitigation.
 
-### 6. Connectivity Dry Run
+### 6. Automation API Bring-Up
+1. Populate `/automatic-web-project/.env.local` with database URLs plus `GRPS_AUTOMATION_SIGNATURE_SECRET`.
+2. Run `npm install`, `npm run lint`, and `PORT=3001 npm run dev` to expose the API locally.
+3. Confirm `/api/leaderboard/top` and `/api/health/live` return JSON payloads before deploying to https://automation.arcfoundation.net.
+
+### 7. Connectivity Dry Run
 1. With FastAPI running locally, execute `python backend/scripts/bootstrap.py` (script defined in `backend/automation.md`) to seed rank data and queue sync jobs.
 2. Trigger the `POST /sync/roblox` endpoint to pull fresh Roblox points and confirm `players` table updates.
 3. From the web project, hit `/api/leaderboard/refresh` (Next.js route) to fetch aggregated stats from the automation service via `grpsBackendClient` (new helper in `web-project/lib`).

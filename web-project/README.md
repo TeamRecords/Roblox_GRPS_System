@@ -1,14 +1,40 @@
-# RLE Web Project (Vercel / Next.js 15 / Tailwind / TS / Prisma / Turnstile)
+# RLE Public Web Project (Next.js 15 / Tailwind / Prisma)
 
-Quick start:
-```
+This Next.js application powers the public-facing Robloxian Lightning Empire (RLE) GRPS portal. It
+is deployed to **https://rle.arcfoundation.net** and hydrates leaderboard data from the live
+automation API hosted at **https://automation.arcfoundation.net** (`/automatic-web-project`).
+
+## Quick Start
+
+```bash
 cd web-project
-npm i
-cp .env.example .env.local
+npm install
+cp ../.env.example .env.local
 npx prisma generate && npx prisma db push
 npm run dev
 ```
 
-Local dev uses built-in mock API routes under `/api/*`. In prod, set `NEXT_PUBLIC_AUTOMATION_BASE_URL` to the Python automation service (`https://automation.example.com`) so the site hydrates from `/leaderboard/top` and `/leaderboard/records`.
-Turnstile: client retrieves token; server verifies via `POST /api/turnstile` which forwards to the automation service `/webhooks/turnstile` endpoint.
-Roblox Open Cloud: use for authenticated tasks; publish read-only snapshots for the site to consume via HTTP, or delegate to the automation `/sync/roblox` endpoint.
+The web portal runs on `http://localhost:3000` during development. When paired with the automation
+API (running on `http://localhost:3001`), the site mirrors the production integration and keeps data
+in sync via the `/api/leaderboard/refresh` route.
+
+## Key Environment Variables
+
+| Variable | Description |
+| --- | --- |
+| `NEXT_PUBLIC_AUTOMATION_BASE_URL` | Public URL for the automation API (defaults to `https://automation.arcfoundation.net`). |
+| `GRPS_AUTOMATION_BASE_URL` | Server-to-server URL for automation fetches; falls back to the public URL. |
+| `GRPS_AUTOMATION_SIGNATURE_SECRET` | HMAC secret shared with the automation API for triggering sync jobs. |
+| `GRPS_SYNC_TOKEN` | Token required to access the local `/api/leaderboard/refresh` route. |
+| `DATABASE_URL` / `DIRECT_URL` | Postgres connection strings shared with Prisma. |
+
+Refer to `../TUTORIAL.md` for a complete end-to-end setup including Roblox, FastAPI, and automation
+service configuration.
+
+## Production Notes
+
+- Deploy via Vercel using the provided `vercel.json` and `next.config.js`.
+- Configure a cron job (Vercel Cron or GitHub Actions) to invoke `/api/leaderboard/refresh`
+  periodically so the Prisma cache stays aligned with automation data.
+- Cloudflare Turnstile is verified through the local API route (`/api/turnstile`) before allowing
+  protected submissions.
