@@ -1,6 +1,15 @@
 # Deploying the GRPS Python Backend on Vultr Ubuntu 24.04
 
-This guide targets a fresh **Vultr Dedicated Cloud** instance running **Ubuntu 24.04 LTS**. It walks through provisioning the FastAPI backend as a hardened systemd service behind Nginx. Adjust the steps for High-Frequency or Cloud Compute plans as required.
+This guide targets a fresh **Vultr Dedicated Cloud** instance running **Ubuntu 24.04 LTS**. It walks through provisioning the FastAPI backend as a hardened systemd service behind Nginx. Adjust the steps for High-Frequency or Cloud Compute plans as required. The walkthrough assumes you are comfortable with SSH and basic Linux administration.
+
+> **Tip** – Commands that modify the system require `root`. Either log in as `root` or prefix the command with `sudo`.
+
+## 0. Prerequisites
+
+1. A Vultr server (Dedicated Cloud or Compute) running Ubuntu 24.04 with at least 2 vCPU and 4 GB RAM.
+2. A domain name if you plan to expose the API publicly (for HTTPS via Let’s Encrypt).
+3. An external PostgreSQL instance (Neon, RDS, Supabase, etc.) or a managed database in Vultr.
+4. Optional: a GitHub deploy key or PAT if you mirror the repository privately.
 
 ## 1. Server Preparation
 
@@ -31,17 +40,27 @@ This guide targets a fresh **Vultr Dedicated Cloud** instance running **Ubuntu 2
 
 ## 2. Automated Installation (Optional)
 
-The repository ships with `backend/deploy/install_backend.sh`, which automates the
-package installs, repository clone, virtual environment creation, and systemd
-unit installation. Run it as root on a fresh host:
+The repository ships with `backend/deploy/install_backend.sh`, which automates the package installs, repository clone, virtual environment creation, and systemd unit installation. **Run it as root** on a fresh host.
+
+### 2.1 Download and Inspect the Installer
 
 ```bash
 cd /opt
-sudo curl -L -o install_backend.sh https://raw.githubusercontent.com/ArcFoundation/Roblox_GRPS_System/main/backend/deploy/install_backend.sh
-sudo bash install_backend.sh
+sudo curl -fsSL -o install_backend.sh https://raw.githubusercontent.com/ArcFoundation/Roblox_GRPS_System/main/backend/deploy/install_backend.sh
+sudo chmod 755 install_backend.sh
+sudo head -n 20 install_backend.sh
 ```
 
-Set `REPO_URL` before invoking the script if you mirror the repository:
+The `head` output lets you confirm that you fetched the shell script (instead of an HTML error page). If it looks good, execute it:
+
+```bash
+cd /opt
+sudo bash ./install_backend.sh
+```
+
+> Getting `install_backend.sh: command not found` usually means the script is not executable or you are not in `/opt`. Run `ls -l /opt/install_backend.sh` to confirm the file exists, ensure you are in `/opt`, and retry the command above.
+
+### 2.2 Override the Repository URL (Optional)
 
 ```bash
 sudo REPO_URL=git@github.com:your-org/Roblox_GRPS_System.git bash install_backend.sh
@@ -72,7 +91,7 @@ Deploy the backend under `/opt/grps/backend` with an isolated virtual environmen
 
 ```bash
 sudo -u grps git clone https://github.com/<YOUR_ORG>/Roblox_GRPS_System.git /opt/grps/src
-sudo -u grps cp -R /opt/grps/src/backend /opt/grps/backend
+sudo -u grps rsync -a --delete /opt/grps/src/backend/ /opt/grps/backend/
 ```
 
 > If you already use a private Git remote, configure SSH keys for the `grps` user before cloning.
