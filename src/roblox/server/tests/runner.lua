@@ -18,6 +18,9 @@ end
 
 register('permissions', require(script.Parent.test_permissions))
 register('punishments', require(script.Parent.test_punishments))
+register('audit', require(script.Parent.test_audit))
+register('datastore', require(script.Parent.test_datastore))
+register('api', require(script.Parent.test_api))
 
 local Runner = {}
 
