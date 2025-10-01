@@ -1,3 +1,6 @@
+title: GRPS Global
+tagline: Roblox GRPS
+description: A Roblox Group Ranking Point Structure (GRPS), updated with Modern API Services.
 remote_theme: pages-themes/midnight@v0.2.0
 plugins:
 - jekyll-remote-theme # add this line to the plugins list if you already have one
