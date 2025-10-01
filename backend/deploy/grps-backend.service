@@ -1,0 +1,19 @@
+[Unit]
+Description=Roblox GRPS Automation Backend
+After=network.target
+Requires=network.target
+
+[Service]
+Type=simple
+User=grps
+Group=grps
+WorkingDirectory=/opt/grps/backend
+EnvironmentFile=/opt/grps/backend/.env
+ExecStart=/opt/grps/backend/venv/bin/python -m backend
+Restart=on-failure
+RestartSec=5
+KillMode=mixed
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
