@@ -3,27 +3,27 @@ import Link from 'next/link'
 export default function NotFound() {
   return (
     <main className="flex min-h-[70vh] items-center justify-center px-6 py-24">
-      <div className="max-w-xl text-center">
-        <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br from-blue-500 to-violet-500 text-3xl font-bold text-white shadow-xl">
-          404
-        </div>
-        <h1 className="mt-8 text-4xl font-semibold text-white">Page not found</h1>
-        <p className="mt-4 text-sm text-slate-300">
-          The page you&apos;re looking for doesn&apos;t exist or has been moved. Explore the latest leaderboard standings or
-          head to our legal center for more information.
+      <div className="panel-emphasis max-w-2xl p-10 text-center">
+        <p className="text-sm uppercase tracking-[0.35em] text-zinc-500">Signal lost</p>
+        <h1 className="mt-6 text-5xl font-semibold text-yellow-100" data-signal>
+          404 — Sector not mapped
+        </h1>
+        <p className="mt-4 text-sm leading-relaxed text-zinc-400">
+          The requested transmission fell outside the mapped command grid. Return to the command deck or inspect our legal
+          directives to remain in compliance with the Roblox empire.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-4 text-sm">
           <Link
             href="/"
-            className="rounded-full border border-white/10 bg-white/10 px-5 py-2 font-medium text-white shadow-lg transition hover:bg-white/20"
+            className="rounded-full bg-yellow-500/20 px-5 py-2 font-medium text-yellow-200 transition hover:bg-yellow-500/30"
           >
-            Back to leaderboard
+            Back to command deck
           </Link>
           <Link
-            href="/legal/leaderstats-rules"
-            className="rounded-full border border-white/10 bg-slate-900/80 px-5 py-2 font-medium text-slate-200 transition hover:border-white/30 hover:text-white"
+            href="/errors/overload"
+            className="rounded-full bg-zinc-800 px-5 py-2 font-medium text-zinc-200 transition hover:bg-zinc-700"
           >
-            Read the rules
+            View system status
           </Link>
         </div>
       </div>

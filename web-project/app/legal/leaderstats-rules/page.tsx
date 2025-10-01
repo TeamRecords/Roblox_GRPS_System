@@ -4,71 +4,55 @@ export const metadata = {
 
 export default function LeaderstatsRulesPage() {
   return (
-    <article className="space-y-8 text-sm leading-relaxed text-slate-200">
+    <article className="space-y-8 text-sm leading-relaxed text-zinc-200">
       <header className="space-y-3">
-        <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Updated March 2024</p>
-        <h2 className="text-3xl font-semibold text-white">Leaderboard Rules</h2>
-        <p className="text-slate-300">
-          The GRPS leaderboard is designed to celebrate authentic competitive play. These rules outline how standings are
-          maintained, how misconduct is handled, and how you can compete fairly.
+        <p className="text-xs uppercase tracking-[0.3em] text-zinc-500">Updated March 2024</p>
+        <h2 className="text-3xl font-semibold text-yellow-100" data-signal>
+          Leaderstats Rules
+        </h2>
+        <p className="text-zinc-400">
+          Compliance with these rules is mandatory for remaining on the Roblox GRPS leaderboard. Violations can result in
+          stat resets, suspensions, or permanent removal.
         </p>
       </header>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">1. Respect Platform Policies</h3>
+        <h3 className="text-lg font-semibold text-yellow-100">Fair Combat</h3>
         <p>
-          Participation in the leaderboard requires full compliance with the official Roblox Terms of Use, Roblox Privacy
-          Policy, Discord Terms of Service, and Discord Privacy Policy. Violations of these policies may result in removal
-          from the leaderboard and associated communities.
+          Exploits, automation, or teaming with known cheaters is strictly forbidden. Reports should be submitted via the
+          Discord relay with supporting evidence.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">2. Legitimate Gameplay Only</h3>
+        <h3 className="text-lg font-semibold text-yellow-100">Stat Integrity</h3>
         <p>
-          Boosting, exploiting, macroing, or otherwise automating gameplay to inflate statistics is prohibited. Accounts
-          found engaging in unfair tactics will have scores reset or be permanently banned from participation.
+          Leaderstats are mirrored directly from Roblox gameplay. Manual stat edits or data tampering attempts will be
+          detected and lead to immediate removal.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">3. Data Integrity</h3>
+        <h3 className="text-lg font-semibold text-yellow-100">Identity Verification</h3>
         <p>
-          Leaderstats are synced directly from Roblox game servers. Attempting to tamper with API responses, interfering with
-          data collection, or sharing false reports undermines the leaderboard and will be subject to disciplinary action.
+          Users must maintain consistent Roblox usernames. Name changes must be announced to moderators to avoid duplicate or
+          conflicting entries.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">4. Community Conduct</h3>
+        <h3 className="text-lg font-semibold text-yellow-100">Communication</h3>
         <p>
-          Treat fellow competitors with respect on Roblox and Discord. Harassment, hate speech, and disruptive behavior are
-          not tolerated. Moderators may suspend players from community spaces or the leaderboard as needed to maintain a safe
-          environment.
+          Official announcements and dispute resolutions occur via the GRPS Discord server. Stay subscribed to updates to
+          avoid missing policy changes.
         </p>
       </section>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">5. Reporting &amp; Appeals</h3>
+        <h3 className="text-lg font-semibold text-yellow-100">Consequences</h3>
         <p>
-          Use the official GRPS support channels to report suspicious activity or leaderboard issues. Provide as much detail
-          as possible. Appeals for disciplinary actions are reviewed by the moderation team and Roblox staff when required.
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">6. Updates</h3>
-        <p>
-          These rules may be updated to reflect platform changes or new game modes. Continued participation after a revision
-          signifies acceptance of the updated rules.
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h3 className="text-lg font-semibold text-white">Need Assistance?</h3>
-        <p>
-          Contact the GRPS moderation staff through our Discord server or Roblox group announcements for clarification about
-          these rules or to request support.
+          Penalties include stat rollbacks, temporary suspensions, or permanent bans depending on severity. Repeat offenders
+          may be reported to Roblox for further enforcement.
         </p>
       </section>
     </article>

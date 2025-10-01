@@ -1,9 +1,18 @@
-import { getTopPlayers } from '@/lib/leaderboard'
+import { NextResponse } from 'next/server'
+import { fetchTopPlayers } from '@/lib/leaderboard'
 
 export async function GET() {
-  const players = getTopPlayers()
+  try {
+    const players = await fetchTopPlayers(30)
 
-  return new Response(JSON.stringify({ players }), {
-    headers: { 'content-type': 'application/json' }
-  })
+    return NextResponse.json({ players })
+  } catch (error) {
+    console.error('Failed to fetch leaderboard top players', error)
+    return NextResponse.json(
+      { error: 'Unable to load leaderboard at this time.' },
+      {
+        status: 500
+      }
+    )
+  }
 }

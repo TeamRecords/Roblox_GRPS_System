@@ -1,9 +1,18 @@
-import { getRecordHolders } from '@/lib/leaderboard'
+import { NextResponse } from 'next/server'
+import { fetchRecordHolders } from '@/lib/leaderboard'
 
 export async function GET() {
-  const { kos, wos } = getRecordHolders()
+  try {
+    const records = await fetchRecordHolders(5)
 
-  return new Response(JSON.stringify({ kos, wos }), {
-    headers: { 'content-type': 'application/json' }
-  })
+    return NextResponse.json(records)
+  } catch (error) {
+    console.error('Failed to fetch record holders', error)
+    return NextResponse.json(
+      { error: 'Unable to load record holders at this time.' },
+      {
+        status: 500
+      }
+    )
+  }
 }
